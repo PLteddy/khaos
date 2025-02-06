@@ -28,6 +28,9 @@ export class GameScene extends Phaser.Scene {
   create() {
     this.setupGame();
     this.createUI();
+    this.cameras.main.setZoom(1); // Force un zoom normal
+    this.cameras.main.setBounds(0, 0, this.scale.width, this.scale.height); // Empêche la caméra de se déplacer
+
   }
 
   private setupGame() {
@@ -95,8 +98,6 @@ export class GameScene extends Phaser.Scene {
     // Animation de pulsation pour attirer l'attention
     this.tweens.add({
       targets: this.chaosText,
-      scaleX: 1.05,
-      scaleY: 1.05,
       duration: 1000,
       yoyo: true,
       repeat: -1,

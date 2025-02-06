@@ -12,10 +12,6 @@ function App() {
       parent: 'game-container',
       backgroundColor: '#2d2d2d',
       scene: GameScene,
-      scale: {
-        mode: Phaser.Scale.FIT,
-        autoCenter: Phaser.Scale.CENTER_BOTH
-      }
     };
 
     // Création de l'instance du jeu
