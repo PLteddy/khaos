@@ -3,24 +3,33 @@ import { Card, GameState, Opponent } from './type';
 import { initialCards, getOpponentsByLevel } from './cards';
 import { getRandomRule } from './rules';
 
-// Fonction pour obtenir un adversaire aléatoire pour le niveau 1
-const getRandomLevel1Opponent = (): Opponent[] => {
-  const opponents = getOpponentsByLevel(1);
-  const randomOpponent = opponents[Math.floor(Math.random() * opponents.length)];
-  return [randomOpponent];
+const getRandomOpponentDeck = (level: number): Card[] => {
+  const opponents = getOpponentsByLevel(level);
+  const mainOpponent = opponents[Math.floor(Math.random() * opponents.length)];
+  
+  // On ajoute 3 cartes supplémentaires du même niveau
+  const additionalCards = opponents
+    .filter(o => o.card.id !== mainOpponent.card.id)
+    .sort(() => Math.random() - 0.5)
+    .slice(0, 3)
+    .map(o => o.card);
+
+  return [mainOpponent.card, ...additionalCards];
 };
 
 const initialState: GameState = {
   level: 1,
   playerDeck: initialCards,
-  aiDeck: [getRandomLevel1Opponent()[0].card],
+  playerUsedCards: [], // Cartes utilisées dans le niveau actuel
+  aiDeck: getRandomOpponentDeck(1),
   playerScore: 0,
   aiScore: 0,
   currentRule: getRandomRule(),
   selectedCard: null,
   aiSelectedCard: null,
   gamePhase: 'selection',
-  availableOpponents: null
+  availableOpponents: null,
+  lastWonCard: null // Dernière carte gagnée
 };
 
 export const useGameStore = create<GameState & {
@@ -35,7 +44,10 @@ export const useGameStore = create<GameState & {
   selectCard: (cardId: number) => set((state) => {
     if (state.gamePhase !== 'selection') return state;
     
-    const selectedCard = state.playerDeck.find(card => card.id === cardId);
+    const selectedCard = state.playerDeck
+      .filter(card => !state.playerUsedCards.includes(card.id))
+      .find(card => card.id === cardId);
+    
     if (!selectedCard) return state;
     
     return {
@@ -52,6 +64,7 @@ export const useGameStore = create<GameState & {
     return {
       ...state,
       aiSelectedCard: aiCard,
+      playerUsedCards: [...state.playerUsedCards, state.selectedCard.id],
       gamePhase: 'reveal'
     };
   }),
@@ -103,13 +116,15 @@ export const useGameStore = create<GameState & {
               level: nextLevel,
               gamePhase: 'selection',
               playerDeck: updatedPlayerDeck,
+              playerUsedCards: [], // Réinitialiser les cartes utilisées
               aiDeck: [zeus.card],
               playerScore: 0,
               aiScore: 0,
               selectedCard: null,
               aiSelectedCard: null,
               currentRule: getRandomRule(),
-              availableOpponents: null
+              availableOpponents: null,
+              lastWonCard: state.aiSelectedCard // Sauvegarder la carte gagnée
             };
           }
           
@@ -120,11 +135,13 @@ export const useGameStore = create<GameState & {
             gamePhase: 'opponent_selection',
             availableOpponents: getOpponentsByLevel(nextLevel),
             playerDeck: updatedPlayerDeck,
+            playerUsedCards: [], // Réinitialiser les cartes utilisées
             playerScore: 0,
             aiScore: 0,
             selectedCard: null,
             aiSelectedCard: null,
-            currentRule: getRandomRule()
+            currentRule: getRandomRule(),
+            lastWonCard: state.aiSelectedCard // Sauvegarder la carte gagnée
           };
         } else {
           // Réinitialiser pour réessayer le niveau
@@ -134,8 +151,10 @@ export const useGameStore = create<GameState & {
             aiScore: 0,
             selectedCard: null,
             aiSelectedCard: null,
+            playerUsedCards: [], // Réinitialiser les cartes utilisées
             gamePhase: 'selection',
-            currentRule: getRandomRule()
+            currentRule: getRandomRule(),
+            lastWonCard: null
           };
         }
       }
@@ -159,14 +178,16 @@ export const useGameStore = create<GameState & {
 
     return {
       ...state,
-      aiDeck: [opponent.card],
+      aiDeck: getRandomOpponentDeck(state.level),
       playerScore: 0,
       aiScore: 0,
       selectedCard: null,
       aiSelectedCard: null,
+      playerUsedCards: [], // Réinitialiser les cartes utilisées
       gamePhase: 'selection',
       currentRule: getRandomRule(),
-      availableOpponents: null
+      availableOpponents: null,
+      lastWonCard: null
     };
   }),
   

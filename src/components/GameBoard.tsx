@@ -1,26 +1,63 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useGameStore } from '../game/store';
-import { Card, Opponent } from '../game/type';
-import { ChaosRuleDisplay } from '../components/ChaosRulesDisplay';
-import { ScoreBoard } from '../components/ScoreBoard';
+import { Card } from '../game/type';
+import { ChaosRuleDisplay } from './ChaosRulesDisplay';
+import { ScoreBoard } from './ScoreBoard';
 
 export const GameBoard: React.FC = () => {
   const {
     playerDeck,
+    playerUsedCards,
     selectedCard,
     aiSelectedCard,
     gamePhase,
     availableOpponents,
+    lastWonCard,
+    level,
+    playerScore,
+    aiScore,
     selectCard,
     confirmSelection,
     nextPhase,
-    selectNextOpponent
+    selectNextOpponent,
+    resetGame
   } = useGameStore();
+
+  // Filtrer les cartes disponibles (non utilisées)
+  const availableCards = playerDeck.filter(card => !playerUsedCards.includes(card.id));
+
+  // État pour le popup de fin de niveau
+  const [showLevelEndPopup, setShowLevelEndPopup] = React.useState(false);
+  const [showGameEndPopup, setShowGameEndPopup] = React.useState(false);
+  const [levelWon, setLevelWon] = React.useState(false);
+
+  // Vérifier la fin du niveau quand le score change
+  React.useEffect(() => {
+    if (playerScore >= 2 || aiScore >= 2) {
+      setLevelWon(playerScore >= 2);
+      if (level === 6) {
+        setShowGameEndPopup(true);
+      } else {
+        setShowLevelEndPopup(true);
+      }
+    }
+  }, [playerScore, aiScore, level]);
 
   if (gamePhase === 'opponent_selection' && availableOpponents) {
     return (
       <div className="min-h-screen bg-gradient-to-b from-purple-900 to-gray-900 text-white p-8">
+        {lastWonCard && (
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-center mb-8 p-4 bg-green-600/20 rounded-lg"
+          >
+            <h3 className="text-xl font-bold text-green-400">
+              Félicitations ! Vous avez gagné la carte {lastWonCard.name} !
+            </h3>
+          </motion.div>
+        )}
         <h2 className="text-3xl font-bold text-center mb-8">Choisissez votre prochain adversaire</h2>
         <div className="grid grid-cols-3 gap-8 max-w-4xl mx-auto">
           {availableOpponents.map((opponent) => (
@@ -46,6 +83,18 @@ export const GameBoard: React.FC = () => {
     <div className="min-h-screen bg-gradient-to-b from-purple-900 to-gray-900 text-white p-8">
       <ScoreBoard />
       
+      {level === 6 && (
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="text-center mb-8 p-4 bg-red-600/20 rounded-lg"
+        >
+          <h3 className="text-2xl font-bold text-red-400">
+            ⚡ BOSS FINAL : ZEUS, ROI DES DIEUX ⚡
+          </h3>
+        </motion.div>
+      )}
+
       <div className="max-w-4xl mx-auto">
         <ChaosRuleDisplay />
         
@@ -67,7 +116,7 @@ export const GameBoard: React.FC = () => {
           <div className="absolute bottom-0 left-0 right-0">
             <div className="flex flex-col items-center gap-8">
               <div className="flex justify-center gap-4">
-                {playerDeck.map((card) => (
+                {availableCards.map((card) => (
                   <motion.div
                     key={card.id}
                     whileHover={{ y: -20 }}
@@ -108,6 +157,87 @@ export const GameBoard: React.FC = () => {
           </div>
         )}
       </div>
+
+      {/* Popup de fin de niveau */}
+      <AnimatePresence>
+        {showLevelEndPopup && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/50 flex items-center justify-center p-4"
+          >
+            <motion.div
+              initial={{ scale: 0.8 }}
+              animate={{ scale: 1 }}
+              exit={{ scale: 0.8 }}
+              className="bg-purple-900 p-8 rounded-xl shadow-xl max-w-md w-full"
+            >
+              <h2 className={`text-2xl font-bold mb-4 ${levelWon ? 'text-green-400' : 'text-red-400'}`}>
+                {levelWon ? 'Niveau terminé !' : 'Niveau échoué !'}
+              </h2>
+              <p className="text-gray-300 mb-6">
+                {levelWon 
+                  ? 'Félicitations ! Vous pouvez maintenant choisir votre prochain adversaire.'
+                  : 'Ne vous découragez pas ! Réessayez ce niveau.'}
+              </p>
+              <button
+                onClick={() => setShowLevelEndPopup(false)}
+                className="w-full px-6 py-3 bg-purple-600 hover:bg-purple-700 rounded-lg font-bold"
+              >
+                Continuer
+              </button>
+            </motion.div>
+          </motion.div>
+        )}
+
+        {/* Popup de fin de jeu (Zeus) */}
+        {showGameEndPopup && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/50 flex items-center justify-center p-4"
+          >
+            <motion.div
+              initial={{ scale: 0.8 }}
+              animate={{ scale: 1 }}
+              exit={{ scale: 0.8 }}
+              className="bg-purple-900 p-8 rounded-xl shadow-xl max-w-md w-full"
+            >
+              <h2 className={`text-2xl font-bold mb-4 ${levelWon ? 'text-green-400' : 'text-red-400'}`}>
+                {levelWon ? 'Victoire contre Zeus !' : 'Défaite face à Zeus !'}
+              </h2>
+              <p className="text-gray-300 mb-6">
+                {levelWon 
+                  ? 'Félicitations ! Vous avez vaincu le roi des dieux !'
+                  : 'Zeus est trop puissant... Pour l\'instant !'}
+              </p>
+              <div className="flex gap-4">
+                <button
+                  onClick={() => {
+                    resetGame();
+                    setShowGameEndPopup(false);
+                  }}
+                  className="flex-1 px-6 py-3 bg-purple-600 hover:bg-purple-700 rounded-lg font-bold"
+                >
+                  Nouvelle partie
+                </button>
+                <button
+                  onClick={() => {
+                    // Redémarrer au niveau 6 (Zeus)
+                    selectNextOpponent(availableOpponents?.[0].card.id || 0);
+                    setShowGameEndPopup(false);
+                  }}
+                  className="flex-1 px-6 py-3 bg-yellow-600 hover:bg-yellow-700 rounded-lg font-bold"
+                >
+                  Réessayer Zeus
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };
