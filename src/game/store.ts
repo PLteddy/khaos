@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { Card, GameState, Opponent } from './type';
+import { Card, GameState, Opponent, GamePhase } from './type';
 import { initialCards, getOpponentsByLevel } from './cards';
 import { getRandomRule } from './rules';
 
@@ -20,16 +20,19 @@ const getRandomOpponentDeck = (level: number): Card[] => {
 const initialState: GameState = {
   level: 1,
   playerDeck: initialCards,
-  playerUsedCards: [], // Cartes utilisées dans le niveau actuel
+  playerUsedCards: [],
   aiDeck: getRandomOpponentDeck(1),
   playerScore: 0,
   aiScore: 0,
   currentRule: getRandomRule(),
   selectedCard: null,
   aiSelectedCard: null,
-  gamePhase: 'selection',
+  gamePhase: 'menu',
   availableOpponents: null,
-  lastWonCard: null // Dernière carte gagnée
+  lastWonCard: null,
+  currentOpponent: null,
+  showResultModal: false,
+  roundWinner: null
 };
 
 export const useGameStore = create<GameState & {
@@ -38,8 +41,15 @@ export const useGameStore = create<GameState & {
   nextPhase: () => void;
   selectNextOpponent: (opponentId: number) => void;
   resetGame: () => void;
+  startGame: () => void;
 }>((set) => ({
   ...initialState,
+
+  startGame: () => set(state => ({
+    ...state,
+    gamePhase: 'selection',
+    currentOpponent: state.aiDeck[0] // Premier adversaire
+  })),
   
   selectCard: (cardId: number) => set((state) => {
     if (state.gamePhase !== 'selection') return state;
@@ -89,83 +99,114 @@ export const useGameStore = create<GameState & {
     }
     
     if (state.gamePhase === 'result') {
-      // Si un joueur a déjà 2 victoires
-      if (state.playerScore >= 2 || state.aiScore >= 2) {
-        const playerWonLevel = state.playerScore >= 2;
-        
-        if (playerWonLevel && state.aiSelectedCard) {
-          // Si c'est le dernier niveau (Zeus), fin du jeu
-          if (state.level === 6) {
-            return {
-              ...initialState,
-              gamePhase: 'game_complete'
-            };
-          }
+      // Vérifier si toutes les cartes ont été utilisées
+      const allCardsUsed = state.playerDeck.length === state.playerUsedCards.length;
 
-          // Récupérer toutes les cartes du joueur + la carte gagnée
-          const updatedPlayerDeck = [...state.playerDeck, state.aiSelectedCard];
-          
-          // Passer au niveau suivant
-          const nextLevel = state.level + 1;
-          
-          // Si c'est le niveau final (Zeus), pas de choix d'adversaire
-          if (nextLevel === 6) {
-            const zeus = getOpponentsByLevel(6)[0];
-            return {
-              ...state,
-              level: nextLevel,
-              gamePhase: 'selection',
-              playerDeck: updatedPlayerDeck,
-              playerUsedCards: [], // Réinitialiser les cartes utilisées
-              aiDeck: [zeus.card],
-              playerScore: 0,
-              aiScore: 0,
-              selectedCard: null,
-              aiSelectedCard: null,
-              currentRule: getRandomRule(),
-              availableOpponents: null,
-              lastWonCard: state.aiSelectedCard // Sauvegarder la carte gagnée
-            };
-          }
-          
-          // Sinon, proposer le choix des adversaires du niveau suivant
+      // Si toutes les cartes n'ont pas été utilisées, continuer le combat
+      if (!allCardsUsed) {
+        return {
+          ...state,
+          selectedCard: null,
+          aiSelectedCard: null,
+          gamePhase: 'selection',
+          currentRule: getRandomRule()
+        };
+      }
+
+      // Si toutes les cartes ont été utilisées, vérifier le score
+      if (state.playerScore > state.aiScore) {
+        // Le joueur a gagné le niveau
+        if (state.level === 6) {
+          // Si c'est le dernier niveau (Zeus), fin du jeu
           return {
-            ...state,
-            level: nextLevel,
-            gamePhase: 'opponent_selection',
-            availableOpponents: getOpponentsByLevel(nextLevel),
-            playerDeck: updatedPlayerDeck,
-            playerUsedCards: [], // Réinitialiser les cartes utilisées
-            playerScore: 0,
-            aiScore: 0,
-            selectedCard: null,
-            aiSelectedCard: null,
-            currentRule: getRandomRule(),
-            lastWonCard: state.aiSelectedCard // Sauvegarder la carte gagnée
-          };
-        } else {
-          // Réinitialiser pour réessayer le niveau
-          return {
-            ...state,
-            playerScore: 0,
-            aiScore: 0,
-            selectedCard: null,
-            aiSelectedCard: null,
-            playerUsedCards: [], // Réinitialiser les cartes utilisées
-            gamePhase: 'selection',
-            currentRule: getRandomRule(),
-            lastWonCard: null
+            ...initialState,
+            gamePhase: 'game_complete'
           };
         }
+
+        // Récupérer toutes les cartes du joueur + la carte gagnée
+        const updatedPlayerDeck = [...state.playerDeck];
+        if (state.aiSelectedCard) {
+          updatedPlayerDeck.push(state.aiSelectedCard);
+        }
+
+        // Passer au niveau suivant
+        const nextLevel = state.level + 1;
+
+        // Afficher la modale de victoire
+        return {
+          ...state,
+          gamePhase: 'level_complete',
+          showResultModal: true,
+          lastWonCard: state.aiSelectedCard
+        };
+      } else {
+        // Le joueur a perdu, afficher la modale d'échec
+        return {
+          ...state,
+          gamePhase: 'level_failed',
+          showResultModal: true
+        };
       }
+    }
+
+    // Gérer la transition après la modale de résultat
+    if (state.gamePhase === 'level_complete') {
+      const nextLevel = state.level + 1;
       
-      // Continuer le combat en cours
+      // Si c'est le niveau final (Zeus), pas de choix d'adversaire
+      if (nextLevel === 6) {
+        const zeus = getOpponentsByLevel(6)[0];
+        return {
+          ...state,
+          level: nextLevel,
+          gamePhase: 'selection',
+          playerDeck: [...state.playerDeck, state.lastWonCard!],
+          playerUsedCards: [],
+          aiDeck: [zeus.card],
+          playerScore: 0,
+          aiScore: 0,
+          selectedCard: null,
+          aiSelectedCard: null,
+          currentRule: getRandomRule(),
+          availableOpponents: null,
+          currentOpponent: zeus.card,
+          showResultModal: false,
+          roundWinner: null
+        };
+      }
+
+      // Sinon, proposer le choix des adversaires du niveau suivant
       return {
         ...state,
+        level: nextLevel,
+        gamePhase: 'opponent_selection',
+        availableOpponents: getOpponentsByLevel(nextLevel),
+        playerDeck: [...state.playerDeck, state.lastWonCard!],
+        playerUsedCards: [],
+        playerScore: 0,
+        aiScore: 0,
         selectedCard: null,
         aiSelectedCard: null,
+        currentRule: getRandomRule(),
+        showResultModal: false,
+        roundWinner: null
+      };
+    }
+
+    if (state.gamePhase === 'level_failed') {
+      // Réinitialiser le niveau
+      return {
+        ...state,
+        playerScore: 0,
+        aiScore: 0,
+        selectedCard: null,
+        aiSelectedCard: null,
+        playerUsedCards: [],
         gamePhase: 'selection',
-        currentRule: getRandomRule()
+        currentRule: getRandomRule(),
+        showResultModal: false,
+        roundWinner: null
       };
     }
     
@@ -183,11 +224,14 @@ export const useGameStore = create<GameState & {
       aiScore: 0,
       selectedCard: null,
       aiSelectedCard: null,
-      playerUsedCards: [], // Réinitialiser les cartes utilisées
+      playerUsedCards: [],
       gamePhase: 'selection',
       currentRule: getRandomRule(),
       availableOpponents: null,
-      lastWonCard: null
+      lastWonCard: null,
+      currentOpponent: opponent.card,
+      showResultModal: false,
+      roundWinner: null
     };
   }),
   

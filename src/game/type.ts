@@ -22,17 +22,30 @@ export interface Opponent {
   description: string;
 }
 
+export type GamePhase = 
+  | 'menu'           // Menu principal
+  | 'selection'      // Sélection de carte
+  | 'reveal'         // Révélation des cartes
+  | 'result'         // Résultat du tour
+  | 'opponent_selection' // Sélection du prochain adversaire
+  | 'game_complete'  // Jeu terminé
+  | 'level_complete' // Niveau terminé
+  | 'level_failed';  // Niveau échoué
+
 export interface GameState {
   level: number;
   playerDeck: Card[];
-  playerUsedCards: number[]; // IDs des cartes utilisées dans le niveau actuel
+  playerUsedCards: number[];
   aiDeck: Card[];
   playerScore: number;
   aiScore: number;
   currentRule: ChaosRule | null;
   selectedCard: Card | null;
   aiSelectedCard: Card | null;
-  gamePhase: 'selection' | 'reveal' | 'result' | 'opponent_selection' | 'game_complete';
+  gamePhase: GamePhase;
   availableOpponents: Opponent[] | null;
-  lastWonCard: Card | null; // Dernière carte gagnée
+  lastWonCard: Card | null;
+  currentOpponent: Card | null;
+  showResultModal: boolean;
+  roundWinner: 'player' | 'ai' | null;
 }
