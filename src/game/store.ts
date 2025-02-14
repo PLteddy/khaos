@@ -1,27 +1,64 @@
 import { create } from 'zustand';
-import { Card, GameState, Opponent, GamePhase } from './type';
+import { Card, GameState, Opponent, GamePhase, ChaosRule } from './type';
 import { initialCards, getOpponentsByLevel } from './cards';
 import { getRandomRule } from './rules';
 
-const getRandomOpponentDeck = (level: number): Card[] => {
-  const opponents = getOpponentsByLevel(level);
-  const mainOpponent = opponents[Math.floor(Math.random() * opponents.length)];
+const getRandomOpponentDeck = (level: number, playerDeckSize: number): Card[] => {
+  let allAvailableCards: Card[] = [];
+  for (let i = 1; i <= level; i++) {
+    const levelCards = getOpponentsByLevel(i).map(o => o.card);
+    allAvailableCards = [...allAvailableCards, ...levelCards];
+  }
+
+  const currentLevelOpponents = getOpponentsByLevel(level);
+  const mainOpponent = currentLevelOpponents[Math.floor(Math.random() * currentLevelOpponents.length)];
   
-  // On ajoute 3 cartes supplémentaires du même niveau
-  const additionalCards = opponents
-    .filter(o => o.card.id !== mainOpponent.card.id)
+  const otherCards = allAvailableCards.filter(card => card.id !== mainOpponent.card.id);
+  
+  const additionalCards = otherCards
     .sort(() => Math.random() - 0.5)
-    .slice(0, 3)
-    .map(o => o.card);
+    .slice(0, playerDeckSize - 1);
 
   return [mainOpponent.card, ...additionalCards];
+};
+
+// Fonction pour évaluer la meilleure carte à jouer en fonction de la règle actuelle
+const evaluateCardForRule = (card: Card, rule: ChaosRule): number => {
+  let score = card.value;
+
+  // Règle "Volonté des Moires" - la plus petite valeur gagne
+  if (rule.name === "Volonté des Moires") {
+    score = 10 - card.value; // Inverse la valeur
+  }
+
+  // Règle "Jugement des Enfers" - Hadès gagne automatiquement
+  if (rule.name === "Jugement des Enfers" && card.name === "Hadès") {
+    score = 100; // Score très élevé pour Hadès
+  }
+
+  // Règle "Bénédiction de Zeus" - Les dieux gagnent un bonus
+  if (rule.name === "Bénédiction de Zeus" && card.type === "god") {
+    score += 2;
+  }
+
+  return score;
+};
+
+// Fonction pour choisir la meilleure carte pour l'IA
+const chooseBestCard = (availableCards: Card[], rule: ChaosRule): Card => {
+  return availableCards.reduce((best, current) => {
+    const bestScore = evaluateCardForRule(best, rule);
+    const currentScore = evaluateCardForRule(current, rule);
+    return currentScore > bestScore ? current : best;
+  }, availableCards[0]);
 };
 
 const initialState: GameState = {
   level: 1,
   playerDeck: initialCards,
   playerUsedCards: [],
-  aiDeck: getRandomOpponentDeck(1),
+  aiDeck: [],
+  aiUsedCards: [],
   playerScore: 0,
   aiScore: 0,
   currentRule: getRandomRule(),
@@ -45,11 +82,16 @@ export const useGameStore = create<GameState & {
 }>((set) => ({
   ...initialState,
 
-  startGame: () => set(state => ({
-    ...state,
-    gamePhase: 'selection',
-    currentOpponent: state.aiDeck[0] // Premier adversaire
-  })),
+  startGame: () => set(state => {
+    const initialDeck = getRandomOpponentDeck(1, state.playerDeck.length);
+    return {
+      ...state,
+      gamePhase: 'selection',
+      aiDeck: initialDeck,
+      aiUsedCards: [],
+      currentOpponent: initialDeck[0]
+    };
+  }),
   
   selectCard: (cardId: number) => set((state) => {
     if (state.gamePhase !== 'selection') return state;
@@ -67,14 +109,17 @@ export const useGameStore = create<GameState & {
   }),
 
   confirmSelection: () => set((state) => {
-    if (!state.selectedCard || state.gamePhase !== 'selection') return state;
+    if (!state.selectedCard || state.gamePhase !== 'selection' || !state.currentRule) return state;
     
-    const aiCard = state.aiDeck[Math.floor(Math.random() * state.aiDeck.length)];
+    // Sélectionner la meilleure carte disponible en fonction de la règle actuelle
+    const availableAiCards = state.aiDeck.filter(card => !state.aiUsedCards.includes(card.id));
+    const aiCard = chooseBestCard(availableAiCards, state.currentRule);
     
     return {
       ...state,
       aiSelectedCard: aiCard,
       playerUsedCards: [...state.playerUsedCards, state.selectedCard.id],
+      aiUsedCards: [...state.aiUsedCards, aiCard.id],
       gamePhase: 'reveal'
     };
   }),
@@ -99,10 +144,8 @@ export const useGameStore = create<GameState & {
     }
     
     if (state.gamePhase === 'result') {
-      // Vérifier si toutes les cartes ont été utilisées
       const allCardsUsed = state.playerDeck.length === state.playerUsedCards.length;
 
-      // Si toutes les cartes n'ont pas été utilisées, continuer le combat
       if (!allCardsUsed) {
         return {
           ...state,
@@ -113,35 +156,21 @@ export const useGameStore = create<GameState & {
         };
       }
 
-      // Si toutes les cartes ont été utilisées, vérifier le score
       if (state.playerScore > state.aiScore) {
-        // Le joueur a gagné le niveau
         if (state.level === 6) {
-          // Si c'est le dernier niveau (Zeus), fin du jeu
           return {
             ...initialState,
             gamePhase: 'game_complete'
           };
         }
 
-        // Récupérer toutes les cartes du joueur + la carte gagnée
-        const updatedPlayerDeck = [...state.playerDeck];
-        if (state.aiSelectedCard) {
-          updatedPlayerDeck.push(state.aiSelectedCard);
-        }
-
-        // Passer au niveau suivant
-        const nextLevel = state.level + 1;
-
-        // Afficher la modale de victoire
         return {
           ...state,
           gamePhase: 'level_complete',
           showResultModal: true,
-          lastWonCard: state.aiSelectedCard
+          lastWonCard: state.currentOpponent
         };
       } else {
-        // Le joueur a perdu, afficher la modale d'échec
         return {
           ...state,
           gamePhase: 'level_failed',
@@ -150,20 +179,20 @@ export const useGameStore = create<GameState & {
       }
     }
 
-    // Gérer la transition après la modale de résultat
     if (state.gamePhase === 'level_complete') {
       const nextLevel = state.level + 1;
       
-      // Si c'est le niveau final (Zeus), pas de choix d'adversaire
       if (nextLevel === 6) {
         const zeus = getOpponentsByLevel(6)[0];
+        const zeusDeck = [zeus.card];
         return {
           ...state,
           level: nextLevel,
           gamePhase: 'selection',
           playerDeck: [...state.playerDeck, state.lastWonCard!],
           playerUsedCards: [],
-          aiDeck: [zeus.card],
+          aiDeck: zeusDeck,
+          aiUsedCards: [],
           playerScore: 0,
           aiScore: 0,
           selectedCard: null,
@@ -176,7 +205,6 @@ export const useGameStore = create<GameState & {
         };
       }
 
-      // Sinon, proposer le choix des adversaires du niveau suivant
       return {
         ...state,
         level: nextLevel,
@@ -184,6 +212,7 @@ export const useGameStore = create<GameState & {
         availableOpponents: getOpponentsByLevel(nextLevel),
         playerDeck: [...state.playerDeck, state.lastWonCard!],
         playerUsedCards: [],
+        aiUsedCards: [],
         playerScore: 0,
         aiScore: 0,
         selectedCard: null,
@@ -195,7 +224,6 @@ export const useGameStore = create<GameState & {
     }
 
     if (state.gamePhase === 'level_failed') {
-      // Réinitialiser le niveau
       return {
         ...state,
         playerScore: 0,
@@ -203,6 +231,7 @@ export const useGameStore = create<GameState & {
         selectedCard: null,
         aiSelectedCard: null,
         playerUsedCards: [],
+        aiUsedCards: [],
         gamePhase: 'selection',
         currentRule: getRandomRule(),
         showResultModal: false,
@@ -217,14 +246,17 @@ export const useGameStore = create<GameState & {
     const opponent = state.availableOpponents?.find(o => o.card.id === opponentId);
     if (!opponent) return state;
 
+    const newDeck = getRandomOpponentDeck(state.level, state.playerDeck.length);
+
     return {
       ...state,
-      aiDeck: getRandomOpponentDeck(state.level),
+      aiDeck: newDeck,
       playerScore: 0,
       aiScore: 0,
       selectedCard: null,
       aiSelectedCard: null,
       playerUsedCards: [],
+      aiUsedCards: [],
       gamePhase: 'selection',
       currentRule: getRandomRule(),
       availableOpponents: null,

@@ -37,6 +37,7 @@ export interface GameState {
   playerDeck: Card[];
   playerUsedCards: number[];
   aiDeck: Card[];
+  aiUsedCards: number[]; // Ajout du suivi des cartes utilisées par l'IA
   playerScore: number;
   aiScore: number;
   currentRule: ChaosRule | null;
