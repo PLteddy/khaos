@@ -1,6 +1,6 @@
 import { create } from 'zustand';
-import { Card, GameState, Opponent, GamePhase, ChaosRule } from './type';
-import { initialCards, getOpponentsByLevel } from './cards';
+import { Card, GameState, Opponent, GamePhase , ChaosRule} from './type';
+import { getInitialDeck, getOpponentsByLevel } from './cards';
 import { getRandomRule } from './rules';
 
 const getRandomOpponentDeck = (level: number, playerDeckSize: number): Card[] => {
@@ -55,7 +55,7 @@ const chooseBestCard = (availableCards: Card[], rule: ChaosRule): Card => {
 
 const initialState: GameState = {
   level: 1,
-  playerDeck: initialCards,
+  playerDeck: getInitialDeck(),
   playerUsedCards: [],
   aiDeck: [],
   aiUsedCards: [],
@@ -69,7 +69,8 @@ const initialState: GameState = {
   lastWonCard: null,
   currentOpponent: null,
   showResultModal: false,
-  roundWinner: null
+  roundWinner: null,
+  lastCheckpoint: null
 };
 
 export const useGameStore = create<GameState & {
@@ -79,6 +80,7 @@ export const useGameStore = create<GameState & {
   selectNextOpponent: (opponentId: number) => void;
   resetGame: () => void;
   startGame: () => void;
+  returnToLastCheckpoint: () => void;
 }>((set) => ({
   ...initialState,
 
@@ -89,7 +91,8 @@ export const useGameStore = create<GameState & {
       gamePhase: 'selection',
       aiDeck: initialDeck,
       aiUsedCards: [],
-      currentOpponent: initialDeck[0]
+      currentOpponent: initialDeck[0],
+      lastCheckpoint: null
     };
   }),
   
@@ -201,7 +204,8 @@ export const useGameStore = create<GameState & {
           availableOpponents: null,
           currentOpponent: zeus.card,
           showResultModal: false,
-          roundWinner: null
+          roundWinner: null,
+          lastCheckpoint: null
         };
       }
 
@@ -219,7 +223,8 @@ export const useGameStore = create<GameState & {
         aiSelectedCard: null,
         currentRule: getRandomRule(),
         showResultModal: false,
-        roundWinner: null
+        roundWinner: null,
+        lastCheckpoint: null
       };
     }
 
@@ -248,6 +253,13 @@ export const useGameStore = create<GameState & {
 
     const newDeck = getRandomOpponentDeck(state.level, state.playerDeck.length);
 
+    // Sauvegarder l'état comme checkpoint
+    const checkpoint = {
+      level: state.level,
+      playerDeck: state.playerDeck,
+      availableOpponents: state.availableOpponents
+    };
+
     return {
       ...state,
       aiDeck: newDeck,
@@ -259,13 +271,39 @@ export const useGameStore = create<GameState & {
       aiUsedCards: [],
       gamePhase: 'selection',
       currentRule: getRandomRule(),
-      availableOpponents: null,
-      lastWonCard: null,
       currentOpponent: opponent.card,
       showResultModal: false,
-      roundWinner: null
+      roundWinner: null,
+      lastCheckpoint: checkpoint
     };
   }),
   
-  resetGame: () => set(initialState)
+  resetGame: () => set({
+    ...initialState,
+    playerDeck: getInitialDeck(),
+    gamePhase: 'menu'
+  }),
+
+  returnToLastCheckpoint: () => set((state) => {
+    if (!state.lastCheckpoint) return state;
+
+    return {
+      ...state,
+      level: state.lastCheckpoint.level,
+      playerDeck: state.lastCheckpoint.playerDeck,
+      availableOpponents: state.lastCheckpoint.availableOpponents,
+      gamePhase: 'opponent_selection',
+      playerScore: 0,
+      aiScore: 0,
+      selectedCard: null,
+      aiSelectedCard: null,
+      playerUsedCards: [],
+      aiUsedCards: [],
+      currentRule: getRandomRule(),
+      showResultModal: false,
+      roundWinner: null,
+      currentOpponent: null,
+      aiDeck: []
+    };
+  })
 }));

@@ -1,6 +1,18 @@
 import { Card } from './type';
 
-export const CARD_TYPES = {
+interface CardType {
+  name: string;
+  type: string;
+  value: number;
+  color: string;
+}
+
+interface Opponent {
+  card: Card;
+  description: string;
+}
+
+export const CARD_TYPES: { [key: string]: CardType } = {
   // Niveau 1 - Mortels
   ORACLE: { name: "Oracle de Delphes", type: "mortal", value: 3, color: "#9333ea" },
   PRETRESSE: { name: "Prêtresse d'Aphrodite", type: "mortal", value: 3, color: "#ec4899" },
@@ -46,16 +58,15 @@ export const CARD_TYPES = {
   ZEUS: { name: "Zeus", type: "boss", value: 8, color: "#fbbf24" }
 } as const;
 
-// Deck initial du joueur
-export const initialCards: Card[] = [
-  { id: 1, ...CARD_TYPES.HERACLES },
-  { id: 2, ...CARD_TYPES.PERSEE },
-  { id: 3, ...CARD_TYPES.ACHILLE }
-];
+// Fonction pour obtenir un deck initial aléatoire
+export function getInitialDeck(): Card[] {
+  const allCards = createDeck();
+  return shuffleDeck(allCards).slice(0, 3);
+}
 
 // Fonction pour obtenir les adversaires par niveau
-export function getOpponentsByLevel(level: number) {
-  const opponents = {
+export function getOpponentsByLevel(level: number): Opponent[] {
+  const opponents: { [key: number]: Opponent[] } = {
     1: [ // Mortels
       { card: { id: 4, ...CARD_TYPES.ORACLE }, description: "Prédit l'avenir, influence les règles de chaos" },
       { card: { id: 5, ...CARD_TYPES.PRETRESSE }, description: "Fait tomber amoureux un adversaire" },
@@ -102,7 +113,9 @@ export function getOpponentsByLevel(level: number) {
     ]
   };
 
-  return opponents[level as keyof typeof opponents] || [];
+  const levelOpponents = opponents[level as keyof typeof opponents] || [];
+  // Mélanger et prendre 3 adversaires aléatoires (ou moins s'il y en a moins de 3)
+  return shuffleDeck(levelOpponents).slice(0, 3);
 }
 
 export function createDeck(): Card[] {
@@ -112,7 +125,7 @@ export function createDeck(): Card[] {
   }));
 }
 
-export function shuffleDeck(deck: Card[]): Card[] {
+export function shuffleDeck<T>(deck: T[]): T[] {
   const shuffled = [...deck];
   for (let i = shuffled.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));

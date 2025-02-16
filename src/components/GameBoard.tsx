@@ -1,11 +1,13 @@
-import React from 'react';
-import { motion } from 'framer-motion';
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useGameStore } from '../game/store';
 import { Card } from '../game/type';
 import { ChaosRuleDisplay } from './ChaosRulesDisplay';
 import { ScoreBoard } from './ScoreBoard';
+import { Menu, RotateCcw } from 'lucide-react';
 
 export const GameBoard: React.FC = () => {
+  const [showMenuConfirm, setShowMenuConfirm] = useState(false);
   const {
     playerDeck,
     playerUsedCards,
@@ -19,7 +21,9 @@ export const GameBoard: React.FC = () => {
     selectCard,
     confirmSelection,
     nextPhase,
-    selectNextOpponent
+    selectNextOpponent,
+    resetGame,
+    returnToLastCheckpoint
   } = useGameStore();
 
   // Filtrer les cartes disponibles (non utilisées)
@@ -64,6 +68,65 @@ export const GameBoard: React.FC = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-purple-900 to-gray-900 text-white p-8">
       <div className="max-w-4xl mx-auto">
+        {/* Boutons Menu et Checkpoint */}
+        <div className="absolute top-4 right-4 flex gap-4">
+          <button
+            onClick={() => setShowMenuConfirm(true)}
+            className="p-2 bg-purple-700 hover:bg-purple-600 rounded-lg transition-colors"
+            title="Menu principal"
+          >
+            <Menu className="w-6 h-6" />
+          </button>
+          <button
+            onClick={returnToLastCheckpoint}
+            className="p-2 bg-purple-700 hover:bg-purple-600 rounded-lg transition-colors"
+            title="Retour au dernier checkpoint"
+          >
+            <RotateCcw className="w-6 h-6" />
+          </button>
+        </div>
+
+        {/* Popup de confirmation pour le menu */}
+        <AnimatePresence>
+          {showMenuConfirm && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
+            >
+              <motion.div
+                initial={{ scale: 0.8, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0.8, opacity: 0 }}
+                className="bg-purple-900 p-8 rounded-xl shadow-xl max-w-md w-full mx-4"
+              >
+                <h3 className="text-xl font-bold mb-4">Retour au menu principal ?</h3>
+                <p className="text-gray-300 mb-6">
+                  Attention : votre progression ne sera pas sauvegardée.
+                </p>
+                <div className="flex gap-4 justify-end">
+                  <button
+                    onClick={() => setShowMenuConfirm(false)}
+                    className="px-4 py-2 bg-gray-600 hover:bg-gray-500 rounded-lg transition-colors"
+                  >
+                    Annuler
+                  </button>
+                  <button
+                    onClick={() => {
+                      resetGame();
+                      setShowMenuConfirm(false);
+                    }}
+                    className="px-4 py-2 bg-red-600 hover:bg-red-500 rounded-lg transition-colors"
+                  >
+                    Confirmer
+                  </button>
+                </div>
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
         {/* En-tête avec niveau et adversaire */}
         <div className="text-center mb-8">
           <h2 className="text-3xl font-bold mb-2">

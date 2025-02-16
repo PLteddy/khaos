@@ -32,12 +32,18 @@ export type GamePhase =
   | 'level_complete' // Niveau terminé
   | 'level_failed';  // Niveau échoué
 
+interface Checkpoint {
+  level: number;
+  playerDeck: Card[];
+  availableOpponents: Opponent[] | null;
+}
+
 export interface GameState {
   level: number;
   playerDeck: Card[];
   playerUsedCards: number[];
   aiDeck: Card[];
-  aiUsedCards: number[]; // Ajout du suivi des cartes utilisées par l'IA
+  aiUsedCards: number[];
   playerScore: number;
   aiScore: number;
   currentRule: ChaosRule | null;
@@ -49,4 +55,5 @@ export interface GameState {
   currentOpponent: Card | null;
   showResultModal: boolean;
   roundWinner: 'player' | 'ai' | null;
+  lastCheckpoint: Checkpoint | null;
 }
