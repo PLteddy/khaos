@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { Card, GameState, Opponent, GamePhase , ChaosRule} from './type';
+import { Card, GameState, Opponent, GamePhase, Language, ChaosRule } from './type';
 import { getInitialDeck, getOpponentsByLevel } from './cards';
 import { getRandomRule } from './rules';
 
@@ -22,21 +22,17 @@ const getRandomOpponentDeck = (level: number, playerDeckSize: number): Card[] =>
   return [mainOpponent.card, ...additionalCards];
 };
 
-// Fonction pour évaluer la meilleure carte à jouer en fonction de la règle actuelle
 const evaluateCardForRule = (card: Card, rule: ChaosRule): number => {
   let score = card.value;
 
-  // Règle "Volonté des Moires" - la plus petite valeur gagne
   if (rule.name === "Volonté des Moires") {
-    score = 10 - card.value; // Inverse la valeur
+    score = 10 - card.value;
   }
 
-  // Règle "Jugement des Enfers" - Hadès gagne automatiquement
   if (rule.name === "Jugement des Enfers" && card.name === "Hadès") {
-    score = 100; // Score très élevé pour Hadès
+    score = 100;
   }
 
-  // Règle "Bénédiction de Zeus" - Les dieux gagnent un bonus
   if (rule.name === "Bénédiction de Zeus" && card.type === "god") {
     score += 2;
   }
@@ -44,7 +40,6 @@ const evaluateCardForRule = (card: Card, rule: ChaosRule): number => {
   return score;
 };
 
-// Fonction pour choisir la meilleure carte pour l'IA
 const chooseBestCard = (availableCards: Card[], rule: ChaosRule): Card => {
   return availableCards.reduce((best, current) => {
     const bestScore = evaluateCardForRule(best, rule);
@@ -70,7 +65,10 @@ const initialState: GameState = {
   currentOpponent: null,
   showResultModal: false,
   roundWinner: null,
-  lastCheckpoint: null
+  lastCheckpoint: null,
+  language: 'fr',
+  showCredits: false,
+  showHowToPlay: false
 };
 
 export const useGameStore = create<GameState & {
@@ -114,7 +112,6 @@ export const useGameStore = create<GameState & {
   confirmSelection: () => set((state) => {
     if (!state.selectedCard || state.gamePhase !== 'selection' || !state.currentRule) return state;
     
-    // Sélectionner la meilleure carte disponible en fonction de la règle actuelle
     const availableAiCards = state.aiDeck.filter(card => !state.aiUsedCards.includes(card.id));
     const aiCard = chooseBestCard(availableAiCards, state.currentRule);
     
@@ -253,7 +250,6 @@ export const useGameStore = create<GameState & {
 
     const newDeck = getRandomOpponentDeck(state.level, state.playerDeck.length);
 
-    // Sauvegarder l'état comme checkpoint
     const checkpoint = {
       level: state.level,
       playerDeck: state.playerDeck,
@@ -280,8 +276,7 @@ export const useGameStore = create<GameState & {
   
   resetGame: () => set({
     ...initialState,
-    playerDeck: getInitialDeck(),
-    gamePhase: 'menu'
+    playerDeck: getInitialDeck()
   }),
 
   returnToLastCheckpoint: () => set((state) => {

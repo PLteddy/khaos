@@ -5,6 +5,7 @@ import { Card } from '../game/type';
 import { ChaosRuleDisplay } from './ChaosRulesDisplay';
 import { ScoreBoard } from './ScoreBoard';
 import { Menu, RotateCcw } from 'lucide-react';
+import cardImage from "../assets/cards2.png";
 
 export const GameBoard: React.FC = () => {
   const [showMenuConfirm, setShowMenuConfirm] = useState(false);
@@ -243,7 +244,7 @@ const CardDisplay: React.FC<CardDisplayProps> = ({ card, isSelected, isRevealed 
         className={`absolute inset-0 rounded-xl bg-gradient-to-br from-purple-800 to-purple-600
           flex items-center justify-center ${isRevealed ? 'opacity-0' : 'opacity-100'} transition-opacity`}
       >
-        <div className="w-16 h-16 rounded-full border-4 border-white/30" />
+        <img src={cardImage} alt="Dos de la carte" className="w-full h-full object-cover rounded-xl" />
       </div>
     </div>
   );

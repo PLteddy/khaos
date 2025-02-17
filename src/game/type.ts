@@ -32,6 +32,8 @@ export type GamePhase =
   | 'level_complete' // Niveau terminé
   | 'level_failed';  // Niveau échoué
 
+export type Language = 'fr' | 'en';
+
 interface Checkpoint {
   level: number;
   playerDeck: Card[];
@@ -56,4 +58,7 @@ export interface GameState {
   showResultModal: boolean;
   roundWinner: 'player' | 'ai' | null;
   lastCheckpoint: Checkpoint | null;
+  language: Language;
+  showCredits: boolean;
+  showHowToPlay: boolean;
 }
