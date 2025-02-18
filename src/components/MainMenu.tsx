@@ -3,6 +3,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Swords, Info, Settings, Mail, Linkedin } from 'lucide-react';
 import { useGameStore } from '../game/store';
 import { Language } from '../game/type';
+import fond from "../assets/fond.png";
+import buttonsfond from "../assets/buttonsfond.png";
 
 const translations = {
   fr: {
@@ -80,48 +82,73 @@ export const MainMenu: React.FC = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-purple-900 to-gray-900 flex flex-col items-center justify-center p-8">
+    <div   className="min-h-screen flex flex-col items-center justify-center p-8"
+    style={{
+      backgroundColor: "black",
+      backgroundImage: `url(${fond})`,
+      backgroundSize: "cover",
+      backgroundPosition: "center",
+    }}>
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         className="text-center mb-12"
       >
-        <h1 className="text-6xl font-bold text-white mb-4">{t.title}</h1>
-        <p className="text-xl text-gray-300">{t.subtitle}</p>
+<h1
+  className="text-6xl font-bold text-white mb-4 p-4"
+>
+  {t.title}
+</h1>
+
+<p
+  className="text-xl text-gray-300 p-4"
+>
+  {t.subtitle}
+</p>
       </motion.div>
 
       <div className="flex flex-col gap-4 w-full max-w-md">
-        <motion.button
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          className="flex items-center justify-center gap-3 bg-purple-600 hover:bg-purple-700 text-white font-bold py-4 px-8 rounded-lg text-xl transition-colors"
-          onClick={startGame}
-        >
-          <Swords className="w-6 h-6" />
-          {t.startGame}
-        </motion.button>
+  <motion.button
+    whileHover={{ scale: 1.05 }}
+    whileTap={{ scale: 0.95 }}
+    className="flex items-center justify-center gap-3 text-white font-bold py-4 px-8 rounded-lg text-xl transition-colors"
+    onClick={startGame}
+    style={{
+      backgroundImage: `url(${buttonsfond})`,
+    }}
+  >
+    <Swords className="w-6 h-6" />
+    {t.startGame}
+  </motion.button>
 
-        <motion.button
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          className="flex items-center justify-center gap-3 bg-yellow-600 hover:bg-yellow-700 text-white font-bold py-4 px-8 rounded-lg text-xl transition-colors"
-          onClick={toggleCredits}
-        >
-          <Info className="w-6 h-6" />
-          {t.credits}
-        </motion.button>
+  <motion.button
+    whileHover={{ scale: 1.05 }}
+    whileTap={{ scale: 0.95 }}
+    className="flex items-center justify-center gap-3 text-white font-bold py-4 px-8 rounded-lg text-xl transition-colors"
+    onClick={toggleCredits}
+    style={{
+      backgroundImage: `url(${buttonsfond})`,
+    }}
+  >
+    <Info className="w-6 h-6" />
+    {t.credits}
+  </motion.button>
 
-        <motion.button
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          className="flex items-center justify-center gap-3 bg-gray-600 hover:bg-gray-700 text-white font-bold py-4 px-8 rounded-lg text-xl transition-colors"
-          onClick={toggleHowToPlay}
-        >
-          <Settings className="w-6 h-6" />
-          {t.options}
-        </motion.button>
-      </div>
-
+  <motion.button
+    whileHover={{ scale: 1.05 }}
+    whileTap={{ scale: 0.95 }}
+    className="flex items-center justify-center gap-3 text-white font-bold py-4 px-8 rounded-lg text-xl transition-colors"
+    onClick={toggleHowToPlay}
+    style={{
+      backgroundImage: `url(${buttonsfond})`,
+      backgroundSize: "cover",
+      backgroundPosition: "center",
+    }}
+  >
+    <Settings className="w-6 h-6" />
+    {t.options}
+  </motion.button>
+</div>
       {/* Modals */}
       <AnimatePresence>
         {showCredits && (
