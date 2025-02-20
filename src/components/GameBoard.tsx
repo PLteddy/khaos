@@ -33,7 +33,7 @@ export const GameBoard: React.FC = () => {
 
   if (gamePhase === 'opponent_selection' && availableOpponents) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-purple-900 to-gray-900 text-white p-8">
+      <div className="min-h-screen bg-black text-white p-8"> 
         {lastWonCard && (
           <motion.div
             initial={{ opacity: 0, y: -20 }}
@@ -67,7 +67,7 @@ export const GameBoard: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-purple-900 to-gray-900 text-white p-8">
+    <div className="min-h-screen bg-black 0 text-white p-8">
       <div className="max-w-4xl mx-auto">
         {/* Boutons Menu et Checkpoint */}
         <div className="absolute top-4 right-4 flex gap-4">
@@ -225,27 +225,27 @@ const CardDisplay: React.FC<CardDisplayProps> = ({ card, isSelected, isRevealed 
       }`}
       style={{ backgroundColor: card.color }}
     >
-      <div className={`absolute inset-0 p-4 flex flex-col items-center justify-between
-        ${isRevealed ? 'opacity-100' : 'opacity-0'} transition-opacity`}>
-        <div className="text-center">
-          <h3 className="font-bold text-white text-shadow">{card.name}</h3>
-          <p className="text-sm text-white/80">{card.type}</p>
-        </div>
-        
-        <div className="w-16 h-16 rounded-full bg-white/20 flex items-center justify-center">
-          <span className="text-3xl font-bold text-white text-shadow">
-            {card.value}
-          </span>
+      <div
+        className={`absolute inset-0 p-4 flex items-center justify-center
+        ${isRevealed ? 'opacity-100' : 'opacity-0'} transition-opacity`}
+      >
+        {/* Image de la carte */}
+        <div className="w-full h-full">
+          <img
+            src={card.image}
+            alt={card.name}
+            className="w-full h-full object-cover rounded-md"
+          />
         </div>
       </div>
-      
+  
       {/* Dos de la carte */}
       <div
         className={`absolute inset-0 rounded-xl bg-gradient-to-br from-purple-800 to-purple-600
-          flex items-center justify-center ${isRevealed ? 'opacity-0' : 'opacity-100'} transition-opacity`}
+          flex items-center justify-center ${isRevealed ? 'opacity-0' : 'opacity-100'}`}
       >
-        <img src={cardImage} alt="Dos de la carte" className="w-full h-full object-cover rounded-xl" />
+        <div className="w-16 h-16 rounded-full border-4 border-white/30" />
       </div>
     </div>
   );
-};
+}

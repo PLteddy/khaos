@@ -4,6 +4,7 @@ export interface Card {
   type: string;
   value: number;
   color: string;
+  image: string;
 }
 
 export interface ChaosRule {

@@ -1,10 +1,12 @@
 import { Card } from './type';
+import OracleImg from '../assets/xard3.png';
 
 interface CardType {
   name: string;
   type: string;
   value: number;
   color: string;
+  image: string;
 }
 
 interface Opponent {
@@ -14,48 +16,104 @@ interface Opponent {
 
 export const CARD_TYPES: { [key: string]: CardType } = {
   // Niveau 1 - Mortels
-  ORACLE: { name: "Oracle de Delphes", type: "mortal", value: 3, color: "#9333ea" },
-  PRETRESSE: { name: "Prêtresse d'Aphrodite", type: "mortal", value: 3, color: "#ec4899" },
-  PHILOSOPHE: { name: "Philosophe", type: "mortal", value: 3, color: "#14b8a6" },
-  ROI_AVEUGLE: { name: "Roi Aveugle", type: "mortal", value: 3, color: "#facc15" },
-  MOINE: { name: "Moine", type: "mortal", value: 3, color: "#84cc16" },
-  MARCHAND: { name: "Marchand", type: "mortal", value: 3, color: "#f59e0b" },
-  SOLDAT: { name: "Soldat", type: "mortal", value: 3, color: "#6b7280" },
-  ESCLAVE: { name: "Esclave", type: "mortal", value: 3, color: "#9ca3af" },
+  ORACLE: { name: "Oracle de Delphes", type: "mortal", value: 3, color: "#9333ea",
+    image: OracleImg
+   },
+  PRETRESSE: { name: "Prêtresse d'Aphrodite", type: "mortal", value: 3, color: "#ec4899",
+    image: OracleImg
+  },
+  PHILOSOPHE: { name: "Philosophe", type: "mortal", value: 3, color: "#14b8a6",
+    image: OracleImg
+   },
+  ROI_AVEUGLE: { name: "Roi Aveugle", type: "mortal", value: 3, color: "#facc15",
+    image: OracleImg
+   },
+  MOINE: { name: "Moine", type: "mortal", value: 3, color: "#84cc16",
+    image: OracleImg
+   },
+  MARCHAND: { name: "Marchand", type: "mortal", value: 3, color: "#f59e0b",
+    image: OracleImg
+   },
+  SOLDAT: { name: "Soldat", type: "mortal", value: 3, color: "#6b7280",
+    image: OracleImg
+   },
+  ESCLAVE: { name: "Esclave", type: "mortal", value: 3, color: "#9ca3af",
+    image: OracleImg
+   },
 
   // Niveau 2 - Créatures
-  MINOTAURE: { name: "Minotaure", type: "creature", value: 4, color: "#9ca3af" },
-  MEDUSE: { name: "Méduse", type: "creature", value: 4, color: "#7c3aed" },
-  CERBERE: { name: "Cerbère", type: "creature", value: 4, color: "#374151" },
-  CHIMERE: { name: "Chimère", type: "creature", value: 4, color: "#dc2626" },
-  SPHINX: { name: "Sphinx", type: "creature", value: 4, color: "#facc15" },
-  HARPIES: { name: "Harpies", type: "creature", value: 4, color: "#9333ea" },
-  GORGONES: { name: "Gorgones", type: "creature", value: 4, color: "#2563eb" },
+  MINOTAURE: { name: "Minotaure", type: "creature", value: 4, color: "#9ca3af",
+    image: OracleImg
+   },
+  MEDUSE: { name: "Méduse", type: "creature", value: 4, color: "#7c3aed",
+    image: OracleImg
+   },
+  CERBERE: { name: "Cerbère", type: "creature", value: 4, color: "#374151",
+    image: OracleImg
+   },
+  HARPIES: { name: "Harpies", type: "creature", value: 4, color: "#9333ea",
+    image: OracleImg
+   },
+
 
   // Niveau 3 - Héros
-  HERACLES: { name: "Héraclès", type: "hero", value: 5, color: "#f97316" },
-  ACHILLE: { name: "Achille", type: "hero", value: 5, color: "#2563eb" },
-  ULYSSE: { name: "Ulysse", type: "hero", value: 5, color: "#7c3aed" },
-  PERSEE: { name: "Persée", type: "hero", value: 5, color: "#d946ef" },
-  THESEE: { name: "Thésée", type: "hero", value: 5, color: "#10b981" },
-  JASON: { name: "Jason", type: "hero", value: 5, color: "#f59e0b" },
-  ATALANTE: { name: "Atalante", type: "hero", value: 5, color: "#84cc16" },
+  HERACLES: { name: "Héraclès", type: "hero", value: 5, color: "#f97316",
+    image: OracleImg
+   },
+  ACHILLE: { name: "Achille", type: "hero", value: 5, color: "#2563eb",
+    image: OracleImg
+   },
+  ULYSSE: { name: "Ulysse", type: "hero", value: 5, color: "#7c3aed",
+    image: OracleImg
+   },
+  PERSEE: { name: "Persée", type: "hero", value: 5, color: "#d946ef",
+    image: OracleImg
+   },
+  THESEE: { name: "Thésée", type: "hero", value: 5, color: "#10b981",
+    image: OracleImg
+   },
+  JASON: { name: "Jason", type: "hero", value: 5, color: "#f59e0b",
+    image: OracleImg
+   },
+  ATALANTE: { name: "Atalante", type: "hero", value: 5, color: "#84cc16" ,
+    image: OracleImg
+  },
 
   // Niveau 4 - Dieux Mineurs
-  ATHENA: { name: "Athéna", type: "god", value: 6, color: "#facc15" },
-  ARES: { name: "Arès", type: "god", value: 6, color: "#dc2626" },
-  APOLLON: { name: "Apollon", type: "god", value: 6, color: "#f59e0b" },
-  ARTEMIS: { name: "Artémis", type: "god", value: 6, color: "#84cc16" },
-  DIONYSOS: { name: "Dionysos", type: "god", value: 6, color: "#9333ea" },
-  HERMES: { name: "Hermès", type: "god", value: 6, color: "#14b8a6" },
+  ATHENA: { name: "Athéna", type: "god", value: 6, color: "#facc15",
+    image: OracleImg
+   },
+  ARES: { name: "Arès", type: "god", value: 6, color: "#dc2626",
+    image: OracleImg
+   },
+  APOLLON: { name: "Apollon", type: "god", value: 6, color: "#f59e0b",
+    image: OracleImg
+   },
+  ARTEMIS: { name: "Artémis", type: "god", value: 6, color: "#84cc16",
+    image: OracleImg
+   },
+  DIONYSOS: { name: "Dionysos", type: "god", value: 6, color: "#9333ea",
+    image: OracleImg
+   },
+  HERMES: { name: "Hermès", type: "god", value: 6, color: "#14b8a6",
+    image: OracleImg
+   },
 
   // Niveau 5 - Dieux Majeurs
-  HADES: { name: "Hadès", type: "major_god", value: 7, color: "#374151" },
-  POSEIDON: { name: "Poséidon", type: "major_god", value: 7, color: "#2563eb" },
-  HERA: { name: "Héra", type: "major_god", value: 7, color: "#d946ef" },
+  HADES: { name: "Hadès", type: "major_god", value: 7, color: "#374151",
+    image: OracleImg
+   },
+  POSEIDON: { name: "Poséidon", type: "major_god", value: 7, color: "#2563eb",
+    image: OracleImg
+   },
+  HERA: { name: "Héra", type: "major_god", value: 7, color: "#d946ef",
+    image: OracleImg
+   },
 
   // Niveau 6 - Boss Final
-  ZEUS: { name: "Zeus", type: "boss", value: 8, color: "#fbbf24" }
+  ZEUS: { name: "Zeus", type: "boss", value: 8, color: "#fbbf24",
+    image: OracleImg
+   }
 } as const;
 
 // Fonction pour obtenir un deck initial aléatoire

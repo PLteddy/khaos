@@ -19,6 +19,7 @@ export const Card: React.FC<CardProps> = ({ card, isSelected, isRevealed }) => {
       }}
       transition={{ duration: 0.6 }}
     >
+      {/* Face de la carte */}
       <div
         className={`absolute inset-0 rounded-xl p-4 flex flex-col items-center justify-between
           ${isRevealed ? 'opacity-100' : 'opacity-0'}`}
@@ -29,6 +30,12 @@ export const Card: React.FC<CardProps> = ({ card, isSelected, isRevealed }) => {
           <p className="text-sm text-white/80">{card.type}</p>
         </div>
         
+        {/* Image de la carte */}
+{card.image ? (
+  <img src={card.image} alt={card.name} className="w-full h-full object-contain rounded-md" />
+) : (
+  <p className="text-sm text-red-500">Image non trouvée</p>
+)}
         <div className="w-16 h-16 rounded-full bg-white/20 flex items-center justify-center">
           <span className="text-3xl font-bold text-white text-shadow">
             {card.value}
@@ -36,7 +43,7 @@ export const Card: React.FC<CardProps> = ({ card, isSelected, isRevealed }) => {
         </div>
       </div>
       
-      {/* Card Back */}
+      {/* Dos de la carte */}
       <div
         className={`absolute inset-0 rounded-xl bg-gradient-to-br from-purple-800 to-purple-600
           flex items-center justify-center ${isRevealed ? 'opacity-0' : 'opacity-100'}`}
