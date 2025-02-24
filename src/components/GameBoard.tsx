@@ -6,6 +6,10 @@ import { ChaosRuleDisplay } from './ChaosRulesDisplay';
 import { ScoreBoard } from './ScoreBoard';
 import { Menu, RotateCcw } from 'lucide-react';
 import cardImage from "../assets/cards2.png";
+import cardBackImage from "../assets/cards2.png";
+import buttonsfond from "../assets/button_menu.png";
+import niveau from "../assets/cerclelvl.png";
+import croix from "../assets/croix.png";
 
 export const GameBoard: React.FC = () => {
   const [showMenuConfirm, setShowMenuConfirm] = useState(false);
@@ -67,25 +71,44 @@ export const GameBoard: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-black 0 text-white p-8">
-      <div className="max-w-4xl mx-auto">
-        {/* Boutons Menu et Checkpoint */}
-        <div className="absolute top-4 right-4 flex gap-4">
-          <button
-            onClick={() => setShowMenuConfirm(true)}
-            className="p-2 bg-purple-700 hover:bg-purple-600 rounded-lg transition-colors"
-            title="Menu principal"
-          >
-            <Menu className="w-6 h-6" />
-          </button>
-          <button
-            onClick={returnToLastCheckpoint}
-            className="p-2 bg-purple-700 hover:bg-purple-600 rounded-lg transition-colors"
-            title="Retour au dernier checkpoint"
-          >
-            <RotateCcw className="w-6 h-6" />
-          </button>
-        </div>
+<div className="min-h-screen bg-black text-white p-8 relative">
+  <div className="max-w-4xl mx-auto">
+    {/* Boutons Menu et Checkpoint */}
+    <div className="absolute bottom-4 left-4 flex flex-col gap-4">
+      <div className="relative z-10 flex flex-col items-center justify-center">
+        <motion.button
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          className="flex items-center justify-center text-white font-bold w-[150px] h-[50px] text-lg transition-colors"
+          onClick={() => setShowMenuConfirm(true)}
+          style={{
+            backgroundImage: `url(${buttonsfond})`,
+            backgroundSize: "contain",
+            backgroundRepeat: "no-repeat",
+            backgroundPosition: "center",
+          }}
+        >
+          Menu
+        </motion.button>
+      </div>
+      <div className="relative z-10 flex flex-col items-center justify-center">
+        <motion.button
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          className="flex items-center justify-center text-white font-bold w-[150px] h-[50px] text-lg transition-colors"
+          onClick={returnToLastCheckpoint}
+          style={{
+            backgroundImage: `url(${buttonsfond})`,
+            backgroundSize: "contain",
+            backgroundRepeat: "no-repeat",
+            backgroundPosition: "center",
+          }}
+        >
+          Restart
+        </motion.button>
+      </div>
+    </div>
+
 
         {/* Popup de confirmation pour le menu */}
         <AnimatePresence>
@@ -130,15 +153,29 @@ export const GameBoard: React.FC = () => {
 
         {/* En-tête avec niveau et adversaire */}
         <div className="text-center mb-8">
-          <h2 className="text-3xl font-bold mb-2">
-            Niveau {level} / 6
-          </h2>
           {currentOpponent && (
             <p className="text-xl text-yellow-400">
               Adversaire : {currentOpponent.name}
             </p>
           )}
         </div>
+
+        <div className="absolute top-4 right-4 flex flex-col items-center gap-2">
+        <span className="text-white text-sm font-mono">LVL</span>
+        {Array.from({ length: 6 }, (_, i) => (
+      <div key={i} className="relative">
+         {/* Image de base */}
+         <img src={niveau} alt="Niveau" className="w-6 h-6" />
+       {/* Croix rouge si le niveau est complété */}
+        {i < level && (
+        <div className="absolute inset-0 flex items-center justify-center">
+           <img src={croix} alt="Croix" className="w-6 h-6" />
+        </div>
+      )}
+    </div>
+  ))}
+</div>
+
 
         <ScoreBoard />
         <ChaosRuleDisplay />
@@ -241,10 +278,10 @@ const CardDisplay: React.FC<CardDisplayProps> = ({ card, isSelected, isRevealed 
   
       {/* Dos de la carte */}
       <div
-        className={`absolute inset-0 rounded-xl bg-gradient-to-br from-purple-800 to-purple-600
-          flex items-center justify-center ${isRevealed ? 'opacity-0' : 'opacity-100'}`}
+        className={`absolute inset-0 rounded-xl
+          flex items-center justify-center ${isRevealed ? 'opacity-0' : 'opacity-100'} transition-opacity`}
       >
-        <div className="w-16 h-16 rounded-full border-4 border-white/30" />
+        <img src={cardBackImage} alt="Dos de la carte" className="w-full h-full object-cover rounded-xl" />
       </div>
     </div>
   );
