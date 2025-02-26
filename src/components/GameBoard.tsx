@@ -72,9 +72,12 @@ export const GameBoard: React.FC = () => {
 
   return (
 <div className="min-h-screen bg-black text-white p-8 relative">
+
   <div className="max-w-4xl mx-auto">
     {/* Boutons Menu et Checkpoint */}
-    <div className="absolute bottom-4 left-4 flex flex-col gap-4">
+    <ScoreBoard className="absolute left-0" />
+    <div className="absolute bottom-12 left-4 flex flex-col gap-4">
+      
       <div className="relative z-10 flex flex-col items-center justify-center">
         <motion.button
           whileHover={{ scale: 1.05 }}
@@ -160,7 +163,7 @@ export const GameBoard: React.FC = () => {
           )}
         </div>
 
-        <div className="absolute top-4 right-4 flex flex-col items-center gap-2">
+        <div className="absolute top-48 right-12 flex flex-col items-center gap-2">
         <span className="text-white text-sm font-mono">LVL</span>
         {Array.from({ length: 6 }, (_, i) => (
       <div key={i} className="relative">
@@ -177,7 +180,7 @@ export const GameBoard: React.FC = () => {
 </div>
 
 
-        <ScoreBoard />
+
         <ChaosRuleDisplay />
         
         {/* Affichage du nombre de cartes restantes */}
@@ -187,6 +190,7 @@ export const GameBoard: React.FC = () => {
         
         <div className="mt-8 relative min-h-[400px]">
           {/* Zone de l'adversaire */}
+
           <div className="absolute top-0 left-0 right-0 h-32 flex justify-center items-center">
             {gamePhase !== 'selection' && aiSelectedCard && (
               <motion.div
@@ -198,8 +202,9 @@ export const GameBoard: React.FC = () => {
               </motion.div>
             )}
           </div>
-          
+
           {/* Zone du joueur */}
+  
           <div className="absolute bottom-0 left-0 right-0">
             <div className="flex flex-col items-center gap-8">
               <div className="flex justify-center gap-4">

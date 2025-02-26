@@ -86,16 +86,14 @@ export const MainMenu: React.FC = () => {
 <div
   className="w-screen h-screen flex items-center justify-center bg-black overflow-hidden"
 >
-  {/* Conteneur du jeu avec taille fixe et mise à l'échelle */}
-  <div
-  className="w-[1280px] h-[600px] flex flex-col items-center justify-center relative overflow-hidden"
+{/* Conteneur du jeu avec redimensionnement automatique */}
+<div
+  className="w-full h-full flex flex-col items-center justify-center relative overflow-hidden"
   style={{
     backgroundColor: "black",
     backgroundImage: `url(${fond})`,
     backgroundSize: "cover",
     backgroundPosition: "center",
-    transform: "scale(0.8)", // Ajuste ici si besoin
-    transformOrigin: "center",
   }}
 >
   <motion.div
