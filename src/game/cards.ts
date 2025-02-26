@@ -1,5 +1,27 @@
 import { Card } from './type';
-import OracleImg from '../assets/xard3.png';
+import Oracle from '../assets/cartes/oracle.png';
+import Zeus from '../assets/cartes/zeus.png';
+import Ulysse from '../assets/cartes/ulysse.png';
+import Philosophe from '../assets/cartes/philosophe.png';
+import Roi from '../assets/cartes/kingt.png';
+import Marchand from '../assets/cartes/mercantt.png';
+import Soldat from '../assets/cartes/soldat.png';
+import Slave from '../assets/cartes/slave.png';
+import Minotaure from '../assets/cartes/minotaure.png';
+import Meduse from '../assets/cartes/meduse.png';
+import Cerbere from '../assets/cartes/cerbere.png';
+import Harpie from '../assets/cartes/harpie.png';
+import Heracles from '../assets/cartes/heracles.png';
+import Achille from '../assets/cartes/achille.png';
+import Thesee from '../assets/cartes/thésée.png';
+import Artemis from '../assets/cartes/artemis.png';
+import Apollon from '../assets/cartes/apollon.png';
+import Athena from '../assets/cartes/athena.png';
+import Hermes from '../assets/cartes/hermes.png';
+import Hera from '../assets/cartes/hera.png';
+import Hades from '../assets/cartes/hades.png';
+import Poseidon from '../assets/cartes/poseidon.png';
+
 
 interface CardType {
   name: string;
@@ -16,103 +38,83 @@ interface Opponent {
 
 export const CARD_TYPES: { [key: string]: CardType } = {
   // Niveau 1 - Mortels
-  ORACLE: { name: "Oracle de Delphes", type: "mortal", value: 3, color: "#9333ea",
-    image: OracleImg
+  ORACLE: { name: "Oracle de Delphes", type: "mortal", value: 6, color: "#9333ea",
+    image: Oracle
    },
-  PRETRESSE: { name: "Prêtresse d'Aphrodite", type: "mortal", value: 3, color: "#ec4899",
-    image: OracleImg
-  },
-  PHILOSOPHE: { name: "Philosophe", type: "mortal", value: 3, color: "#14b8a6",
-    image: OracleImg
+  PHILOSOPHE: { name: "Philosophe", type: "mortal", value: 5, color: "#14b8a6",
+    image: Philosophe
    },
-  ROI_AVEUGLE: { name: "Roi Aveugle", type: "mortal", value: 3, color: "#facc15",
-    image: OracleImg
-   },
-  MOINE: { name: "Moine", type: "mortal", value: 3, color: "#84cc16",
-    image: OracleImg
+  ROI_AVEUGLE: { name: "Roi Aveugle", type: "mortal", value: 4, color: "#facc15",
+    image: Roi
    },
   MARCHAND: { name: "Marchand", type: "mortal", value: 3, color: "#f59e0b",
-    image: OracleImg
+    image: Marchand
    },
-  SOLDAT: { name: "Soldat", type: "mortal", value: 3, color: "#6b7280",
-    image: OracleImg
+  SOLDAT: { name: "Soldat", type: "mortal", value: 2, color: "#6b7280",
+    image: Soldat
    },
-  ESCLAVE: { name: "Esclave", type: "mortal", value: 3, color: "#9ca3af",
-    image: OracleImg
+  ESCLAVE: { name: "Esclave", type: "mortal", value: 1, color: "#9ca3af",
+    image: Slave
    },
 
   // Niveau 2 - Créatures
-  MINOTAURE: { name: "Minotaure", type: "creature", value: 4, color: "#9ca3af",
-    image: OracleImg
+  MINOTAURE: { name: "Minotaure", type: "creature", value: 10, color: "#9ca3af",
+    image: Minotaure
    },
-  MEDUSE: { name: "Méduse", type: "creature", value: 4, color: "#7c3aed",
-    image: OracleImg
+  MEDUSE: { name: "Méduse", type: "creature", value: 9, color: "#7c3aed",
+    image: Meduse
    },
-  CERBERE: { name: "Cerbère", type: "creature", value: 4, color: "#374151",
-    image: OracleImg
+  CERBERE: { name: "Cerbère", type: "creature", value: 8, color: "#374151",
+    image: Cerbere
    },
-  HARPIES: { name: "Harpies", type: "creature", value: 4, color: "#9333ea",
-    image: OracleImg
+  HARPIES: { name: "Harpies", type: "creature", value: 7, color: "#9333ea",
+    image: Harpie
    },
 
 
   // Niveau 3 - Héros
-  HERACLES: { name: "Héraclès", type: "hero", value: 5, color: "#f97316",
-    image: OracleImg
+  HERACLES: { name: "Héraclès", type: "hero", value: 14, color: "#f97316",
+    image: Heracles
    },
-  ACHILLE: { name: "Achille", type: "hero", value: 5, color: "#2563eb",
-    image: OracleImg
+  ACHILLE: { name: "Achille", type: "hero", value: 13, color: "#2563eb",
+    image: Achille
    },
-  ULYSSE: { name: "Ulysse", type: "hero", value: 5, color: "#7c3aed",
-    image: OracleImg
+  ULYSSE: { name: "Ulysse", type: "hero", value: 12, color: "#7c3aed",
+    image: Ulysse
    },
-  PERSEE: { name: "Persée", type: "hero", value: 5, color: "#d946ef",
-    image: OracleImg
+  THESEE: { name: "Thésée", type: "hero", value: 11, color: "#10b981",
+    image: Thesee
    },
-  THESEE: { name: "Thésée", type: "hero", value: 5, color: "#10b981",
-    image: OracleImg
-   },
-  JASON: { name: "Jason", type: "hero", value: 5, color: "#f59e0b",
-    image: OracleImg
-   },
-  ATALANTE: { name: "Atalante", type: "hero", value: 5, color: "#84cc16" ,
-    image: OracleImg
-  },
+
 
   // Niveau 4 - Dieux Mineurs
-  ATHENA: { name: "Athéna", type: "god", value: 6, color: "#facc15",
-    image: OracleImg
+  ATHENA: { name: "Athéna", type: "god", value: 18, color: "#facc15",
+    image: Athena
    },
-  ARES: { name: "Arès", type: "god", value: 6, color: "#dc2626",
-    image: OracleImg
+  APOLLON: { name: "Apollon", type: "god", value: 17, color: "#f59e0b",
+    image: Apollon
    },
-  APOLLON: { name: "Apollon", type: "god", value: 6, color: "#f59e0b",
-    image: OracleImg
+  ARTEMIS: { name: "Artémis", type: "god", value: 16, color: "#84cc16",
+    image: Artemis
    },
-  ARTEMIS: { name: "Artémis", type: "god", value: 6, color: "#84cc16",
-    image: OracleImg
-   },
-  DIONYSOS: { name: "Dionysos", type: "god", value: 6, color: "#9333ea",
-    image: OracleImg
-   },
-  HERMES: { name: "Hermès", type: "god", value: 6, color: "#14b8a6",
-    image: OracleImg
+  HERMES: { name: "Hermès", type: "god", value: 15, color: "#14b8a6",
+    image: Hermes
    },
 
   // Niveau 5 - Dieux Majeurs
-  HADES: { name: "Hadès", type: "major_god", value: 7, color: "#374151",
-    image: OracleImg
+  HADES: { name: "Hadès", type: "major_god", value: 21, color: "#374151",
+    image: Hades
    },
-  POSEIDON: { name: "Poséidon", type: "major_god", value: 7, color: "#2563eb",
-    image: OracleImg
+  POSEIDON: { name: "Poséidon", type: "major_god", value: 20, color: "#2563eb",
+    image: Poseidon
    },
-  HERA: { name: "Héra", type: "major_god", value: 7, color: "#d946ef",
-    image: OracleImg
+  HERA: { name: "Héra", type: "major_god", value: 19, color: "#d946ef",
+    image: Hera
    },
 
   // Niveau 6 - Boss Final
-  ZEUS: { name: "Zeus", type: "boss", value: 8, color: "#fbbf24",
-    image: OracleImg
+  ZEUS: { name: "Zeus", type: "boss", value: 22, color: "#fbbf24",
+    image: Zeus
    }
 } as const;
 
@@ -127,10 +129,8 @@ export function getOpponentsByLevel(level: number): Opponent[] {
   const opponents: { [key: number]: Opponent[] } = {
     1: [ // Mortels
       { card: { id: 4, ...CARD_TYPES.ORACLE }, description: "Prédit l'avenir, influence les règles de chaos" },
-      { card: { id: 5, ...CARD_TYPES.PRETRESSE }, description: "Fait tomber amoureux un adversaire" },
       { card: { id: 6, ...CARD_TYPES.PHILOSOPHE }, description: "Gagne face à la violence brute par la logique" },
       { card: { id: 7, ...CARD_TYPES.ROI_AVEUGLE }, description: "Possède une sagesse cachée" },
-      { card: { id: 8, ...CARD_TYPES.MOINE }, description: "Protégé par les dieux" },
       { card: { id: 9, ...CARD_TYPES.MARCHAND }, description: "Peut négocier sa survie" },
       { card: { id: 10, ...CARD_TYPES.SOLDAT }, description: "Un simple guerrier, sans pouvoir particulier" },
       { card: { id: 11, ...CARD_TYPES.ESCLAVE }, description: "Le plus faible… mais peut surprendre avec une règle de chaos" }
@@ -139,26 +139,18 @@ export function getOpponentsByLevel(level: number): Opponent[] {
       { card: { id: 12, ...CARD_TYPES.MINOTAURE }, description: "Monstre brutal du labyrinthe" },
       { card: { id: 13, ...CARD_TYPES.MEDUSE }, description: "Transforme en pierre ceux qui la regardent" },
       { card: { id: 14, ...CARD_TYPES.CERBERE }, description: "Gardien des Enfers, 3 têtes" },
-      { card: { id: 15, ...CARD_TYPES.CHIMERE }, description: "Créature hybride, souffle le feu" },
-      { card: { id: 16, ...CARD_TYPES.SPHINX }, description: "Maître des énigmes mortelles" },
       { card: { id: 17, ...CARD_TYPES.HARPIES }, description: "Démons ailés, voleurs rapides" },
-      { card: { id: 18, ...CARD_TYPES.GORGONES }, description: "Sœurs de Méduse, regard pétrifiant" }
     ],
     3: [ // Héros
       { card: { id: 19, ...CARD_TYPES.HERACLES }, description: "Le plus grand héros, force colossale" },
       { card: { id: 20, ...CARD_TYPES.ACHILLE }, description: "Guerrier invincible sauf au talon" },
       { card: { id: 21, ...CARD_TYPES.ULYSSE }, description: "Maître de la ruse et de la stratégie" },
-      { card: { id: 22, ...CARD_TYPES.PERSEE }, description: "Tueur de Méduse, sauveur d'Andromède" },
       { card: { id: 23, ...CARD_TYPES.THESEE }, description: "Vainqueur du Minotaure" },
-      { card: { id: 24, ...CARD_TYPES.JASON }, description: "Chef des Argonautes" },
-      { card: { id: 25, ...CARD_TYPES.ATALANTE }, description: "Chasseuse ultra-rapide" }
     ],
     4: [ // Dieux Mineurs
       { card: { id: 26, ...CARD_TYPES.ATHENA }, description: "Déesse de la sagesse et de la guerre stratégique" },
-      { card: { id: 27, ...CARD_TYPES.ARES }, description: "Dieu de la guerre brutale" },
       { card: { id: 28, ...CARD_TYPES.APOLLON }, description: "Dieu de la lumière et des arts" },
       { card: { id: 29, ...CARD_TYPES.ARTEMIS }, description: "Déesse de la chasse et de la nature" },
-      { card: { id: 30, ...CARD_TYPES.DIONYSOS }, description: "Dieu de la fête et de la folie" },
       { card: { id: 31, ...CARD_TYPES.HERMES }, description: "Messager des dieux, maître des ruses" }
     ],
     5: [ // Dieux Majeurs

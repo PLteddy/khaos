@@ -261,26 +261,19 @@ interface CardDisplayProps {
 
 const CardDisplay: React.FC<CardDisplayProps> = ({ card, isSelected, isRevealed }) => {
   return (
-    <div
-      className={`relative w-32 h-48 rounded-xl transition-transform ${
-        isSelected ? 'ring-4 ring-yellow-400' : ''
-      }`}
-      style={{ backgroundColor: card.color }}
-    >
-      <div
-        className={`absolute inset-0 p-4 flex items-center justify-center
-        ${isRevealed ? 'opacity-100' : 'opacity-0'} transition-opacity`}
-      >
-        {/* Image de la carte */}
-        <div className="w-full h-full">
-          <img
-            src={card.image}
-            alt={card.name}
-            className="w-full h-full object-cover rounded-md"
-          />
-        </div>
-      </div>
-  
+<div
+  className={`relative w-32 h-48 rounded-xl overflow-hidden transition-transform ${
+    isSelected ? 'ring-4 ring-yellow-400' : ''
+  }`}
+>
+  {/* Image de la carte */}
+  <img
+    src={card.image}
+    alt={card.name}
+    className={`absolute inset-0 w-full h-full object-cover transition-opacity ${
+      isRevealed ? 'opacity-100' : 'opacity-0'
+    }`}
+  />
       {/* Dos de la carte */}
       <div
         className={`absolute inset-0 rounded-xl
