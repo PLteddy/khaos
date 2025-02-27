@@ -2,13 +2,16 @@ import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Trophy, XCircle } from 'lucide-react';
 import { useGameStore } from '../game/store';
+import { useNavigate } from 'react-router-dom';
 
 export const ResultModal: React.FC = () => {
-  const { showResultModal, gamePhase, lastWonCard, currentOpponent, level, nextPhase } = useGameStore();
+  const { showResultModal, gamePhase, lastWonCard, currentOpponent, level, nextPhase, resetGame } = useGameStore();
+  const navigate = useNavigate();
 
   if (!showResultModal) return null;
 
   const isVictory = gamePhase === 'level_complete';
+  const isFinalLevel = level === 6; // Vérifie si c'est le dernier niveau
 
   return (
     <AnimatePresence>
@@ -28,7 +31,9 @@ export const ResultModal: React.FC = () => {
             {isVictory ? (
               <>
                 <Trophy className="w-16 h-16 text-yellow-400 mx-auto mb-4" />
-                <h2 className="text-2xl font-bold text-white mb-4">Niveau {level} terminé !</h2>
+                <h2 className="text-2xl font-bold text-white mb-4">
+                  {isFinalLevel ? "Félicitations, vous avez terminé le jeu !" : `Niveau ${level} terminé !`}
+                </h2>
                 {lastWonCard && (
                   <div className="bg-purple-700/50 rounded-lg p-4 mb-6">
                     <p className="text-yellow-400 font-bold mb-2">Carte gagnée :</p>
@@ -36,8 +41,17 @@ export const ResultModal: React.FC = () => {
                   </div>
                 )}
                 <p className="text-gray-300 mb-6">
-                  Félicitations ! Vous avez vaincu {currentOpponent?.name} !
+                  {isFinalLevel
+                    ? "Vous avez vaincu tous les adversaires et remporté la victoire ultime !"
+                    : `Félicitations ! Vous avez vaincu ${currentOpponent?.name} !`}
                 </p>
+
+                <button
+                  onClick={() => (isFinalLevel ? navigate('/') : nextPhase())}
+                  className="bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-6 rounded-lg transition-colors"
+                >
+                  {isFinalLevel ? 'Retour à l\'accueil' : 'Niveau suivant'}
+                </button>
               </>
             ) : (
               <>
@@ -46,15 +60,15 @@ export const ResultModal: React.FC = () => {
                 <p className="text-gray-300 mb-6">
                   {currentOpponent?.name} vous a vaincu. Réessayez !
                 </p>
+
+                <button
+                  onClick={() => nextPhase()} // Permet toujours de recommencer, même au niveau 6
+                  className="bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-6 rounded-lg transition-colors"
+                >
+                  Réessayer
+                </button>
               </>
             )}
-
-            <button
-              onClick={() => nextPhase()}
-              className="bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-6 rounded-lg transition-colors"
-            >
-              {isVictory ? 'Niveau suivant' : 'Réessayer'}
-            </button>
           </div>
         </motion.div>
       </motion.div>

@@ -51,20 +51,22 @@ export const GameBoard: React.FC = () => {
         )}
         <h2 className="text-3xl font-bold text-center mb-8">Choisissez votre prochain adversaire</h2>
         <div className="grid grid-cols-3 gap-8 max-w-4xl mx-auto">
-          {availableOpponents.map((opponent) => (
-            <motion.div
-              key={opponent.card.id}
-              className="bg-purple-800/50 rounded-lg p-6 cursor-pointer hover:bg-purple-700/50 transition-colors"
-              whileHover={{ scale: 1.05 }}
-              onClick={() => selectNextOpponent(opponent.card.id)}
-            >
-              <h3 className="text-xl font-bold mb-2">{opponent.card.name}</h3>
-              <p className="text-sm text-gray-300 mb-4">{opponent.description}</p>
-              <div className="text-yellow-400 font-bold">
-                Force: {opponent.card.value}
-              </div>
-            </motion.div>
-          ))}
+        {availableOpponents.map((opponent) => (
+  opponent.card ? ( // On vérifie que `opponent.card` existe
+    <motion.div
+      key={opponent.card.id}
+      className="bg-purple-800/50 rounded-lg p-6 cursor-pointer hover:bg-purple-700/50 transition-colors"
+      whileHover={{ scale: 1.05 }}
+      onClick={() => selectNextOpponent(opponent.card.id)}
+    >
+      <h3 className="text-xl font-bold mb-2">{opponent.card.name}</h3>
+      <p className="text-sm text-gray-300 mb-4">{opponent.description}</p>
+      <div className="text-yellow-400 font-bold">
+        Force: {opponent.card.value}
+      </div>
+    </motion.div>
+  ) : null // Si `opponent.card` est undefined, on affiche rien
+))}
         </div>
       </div>
     );

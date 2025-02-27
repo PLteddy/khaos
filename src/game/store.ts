@@ -25,28 +25,19 @@ const getRandomOpponentDeck = (level: number, playerDeckSize: number): Card[] =>
 const evaluateCardForRule = (card: Card, rule: ChaosRule): number => {
   let score = card.value;
 
-  if (rule.name === "Volonté des Moires") {
-    score = 10 - card.value;
-  }
-
-  if (rule.name === "Jugement des Enfers" && card.name === "Hadès") {
-    score = 100;
-  }
-
-  if (rule.name === "Bénédiction de Zeus" && card.type === "god") {
-    score += 2;
-  }
-
   return score;
 };
 
-const chooseBestCard = (availableCards: Card[], rule: ChaosRule): Card => {
+const chooseBestCard = (availableCards: Card[], rule: ChaosRule): Card | null => {
+  if (availableCards.length === 0) return null; // Évite de retourner undefined
+
   return availableCards.reduce((best, current) => {
     const bestScore = evaluateCardForRule(best, rule);
     const currentScore = evaluateCardForRule(current, rule);
     return currentScore > bestScore ? current : best;
   }, availableCards[0]);
 };
+
 
 const initialState: GameState = {
   level: 1,
@@ -113,7 +104,29 @@ export const useGameStore = create<GameState & {
     if (!state.selectedCard || state.gamePhase !== 'selection' || !state.currentRule) return state;
     
     const availableAiCards = state.aiDeck.filter(card => !state.aiUsedCards.includes(card.id));
-    const aiCard = chooseBestCard(availableAiCards, state.currentRule);
+    let aiCard = chooseBestCard(availableAiCards, state.currentRule);
+    
+    // 🔍 Si aucune carte n'est disponible, choisir une carte au hasard dans le deck total de l'IA
+    if (!aiCard && state.aiDeck.length > 0) {
+      aiCard = state.aiDeck[Math.floor(Math.random() * state.aiDeck.length)];
+    }
+    
+    if (!aiCard) {
+      console.error("Erreur: Aucune carte AI disponible, même dans le deck complet !");
+      return state; // Sécurité supplémentaire
+    }
+
+    
+    // 🔍 Debugging logs pour voir le problème
+    console.log("Deck IA :", state.aiDeck);
+    console.log("Cartes IA déjà utilisées :", state.aiUsedCards);
+    console.log("Cartes IA disponibles :", availableAiCards);
+
+    // Vérification pour éviter l'erreur
+    if (!aiCard) {
+        console.error("Erreur: Aucune carte AI disponible !");
+        return state; // Ne change rien et évite l'erreur
+    }
     
     return {
       ...state,
@@ -122,7 +135,8 @@ export const useGameStore = create<GameState & {
       aiUsedCards: [...state.aiUsedCards, aiCard.id],
       gamePhase: 'reveal'
     };
-  }),
+}),
+
   
   nextPhase: () => set((state) => {
     if (state.gamePhase === 'selection') return state;
