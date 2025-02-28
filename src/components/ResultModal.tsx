@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Trophy, XCircle } from 'lucide-react';
 import { useGameStore } from '../game/store';
@@ -7,11 +7,20 @@ import { useNavigate } from 'react-router-dom';
 export const ResultModal: React.FC = () => {
   const { showResultModal, gamePhase, lastWonCard, currentOpponent, level, nextPhase, resetGame } = useGameStore();
   const navigate = useNavigate();
+  const [showFinalModal, setShowFinalModal] = useState(false);
 
-  if (!showResultModal) return null;
-
+  const isFinalLevel = level === 6;
   const isVictory = gamePhase === 'level_complete';
-  const isFinalLevel = level === 6; // Vérifie si c'est le dernier niveau
+  const isFinalVictory = isVictory && isFinalLevel;
+
+  // Afficher directement le modal final si on atteint la victoire finale
+  useEffect(() => {
+    if (isFinalVictory) {
+      setShowFinalModal(true);
+    }
+  }, [isFinalVictory]);
+
+  if (!showResultModal && !isFinalVictory) return null;
 
   return (
     <AnimatePresence>
@@ -32,7 +41,7 @@ export const ResultModal: React.FC = () => {
               <>
                 <Trophy className="w-16 h-16 text-yellow-400 mx-auto mb-4" />
                 <h2 className="text-2xl font-bold text-white mb-4">
-                  {isFinalLevel ? "Félicitations, vous avez terminé le jeu !" : `Niveau ${level} terminé !`}
+                  {isFinalLevel ? "🏆 Félicitations, vous avez terminé le jeu ! 🎉" : `Niveau ${level} terminé !`}
                 </h2>
                 {lastWonCard && (
                   <div className="bg-purple-700/50 rounded-lg p-4 mb-6">
@@ -46,12 +55,36 @@ export const ResultModal: React.FC = () => {
                     : `Félicitations ! Vous avez vaincu ${currentOpponent?.name} !`}
                 </p>
 
-                <button
-                  onClick={() => (isFinalLevel ? navigate('/') : nextPhase())}
-                  className="bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-6 rounded-lg transition-colors"
-                >
-                  {isFinalLevel ? 'Retour à l\'accueil' : 'Niveau suivant'}
-                </button>
+                {isFinalLevel ? (
+                  <div className="flex flex-col gap-4">
+                    <button
+                      onClick={() => {
+                        resetGame();
+                        navigate('/');
+                      }}
+                      className="bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-6 rounded-lg transition-colors"
+                    >
+                      Retour au menu
+                    </button>
+
+                    <button
+                      onClick={() => {
+                        resetGame();
+                        setShowFinalModal(false);
+                      }}
+                      className="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg transition-colors"
+                    >
+                      Recommencer
+                    </button>
+                  </div>
+                ) : (
+                  <button
+                    onClick={nextPhase}
+                    className="bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-6 rounded-lg transition-colors"
+                  >
+                    Niveau suivant
+                  </button>
+                )}
               </>
             ) : (
               <>
@@ -62,7 +95,7 @@ export const ResultModal: React.FC = () => {
                 </p>
 
                 <button
-                  onClick={() => nextPhase()} // Permet toujours de recommencer, même au niveau 6
+                  onClick={() => nextPhase()}
                   className="bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-6 rounded-lg transition-colors"
                 >
                   Réessayer

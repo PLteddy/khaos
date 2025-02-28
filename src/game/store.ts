@@ -3,6 +3,7 @@ import { Card, GameState, Opponent, GamePhase, Language, ChaosRule } from './typ
 import { getInitialDeck, getOpponentsByLevel } from './cards';
 import { getRandomRule } from './rules';
 
+
 const getRandomOpponentDeck = (level: number, playerDeckSize: number): Card[] => {
   let allAvailableCards: Card[] = [];
   for (let i = 1; i <= level; i++) {
@@ -174,7 +175,8 @@ export const useGameStore = create<GameState & {
         if (state.level === 6) {
           return {
             ...initialState,
-            gamePhase: 'game_complete'
+            gamePhase: 'game_complete',
+            showResultModal: true, // On active bien le modal final
           };
         }
 

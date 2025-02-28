@@ -4,6 +4,7 @@ import { useGameStore } from '../game/store';
 import { Card } from '../game/type';
 import { ChaosRuleDisplay } from './ChaosRulesDisplay';
 import { ScoreBoard } from './ScoreBoard';
+import { ResultModal} from './ResultModal';
 import { Menu, RotateCcw } from 'lucide-react';
 import cardImage from "../assets/cards2.png";
 import cardBackImage from "../assets/cards2.png";
@@ -240,16 +241,18 @@ export const GameBoard: React.FC = () => {
           </div>
         </div>
         
-        {gamePhase !== 'selection' && (
-          <div className="mt-8 text-center">
-            <button
-              onClick={nextPhase}
-              className="px-6 py-3 bg-purple-600 hover:bg-purple-700 rounded-lg font-bold"
-            >
-              {gamePhase === 'reveal' ? 'Révéler les cartes' : 'Tour suivant'}
-            </button>
-          </div>
-        )}
+        {gamePhase !== 'selection' && gamePhase !== 'level_complete' && (
+  <div className="mt-8 text-center">
+    <button
+      onClick={nextPhase}
+      className="px-6 py-3 bg-purple-600 hover:bg-purple-700 rounded-lg font-bold"
+    >
+      {gamePhase === 'reveal' ? 'Révéler les cartes' : 'Tour suivant'}
+    </button>
+  </div>
+)}
+
+
       </div>
     </div>
   );
