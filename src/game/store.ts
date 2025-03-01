@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import { Card, GameState, Opponent, GamePhase, Language, ChaosRule } from './type';
 import { getInitialDeck, getOpponentsByLevel } from './cards';
 import { getRandomRule } from './rules';
+import { SoundSystem } from './sound';
 
 
 const getRandomOpponentDeck = (level: number, playerDeckSize: number): Card[] => {
@@ -60,7 +61,9 @@ const initialState: GameState = {
   lastCheckpoint: null,
   language: 'fr',
   showCredits: false,
-  showHowToPlay: false
+  showHowToPlay: false,
+  soundEnabled: true,
+  musicEnabled: true
 };
 
 export const useGameStore = create<GameState & {
@@ -70,23 +73,27 @@ export const useGameStore = create<GameState & {
   selectNextOpponent: (opponentId: number) => void;
   resetGame: () => void;
   startGame: () => void;
+  
   returnToLastCheckpoint: () => void;
 }>((set) => ({
   ...initialState,
 
   startGame: () => set(state => {
     const initialDeck = getRandomOpponentDeck(1, state.playerDeck.length);
+    SoundSystem.play('buttonClick');
     return {
       ...state,
       gamePhase: 'selection',
       aiDeck: initialDeck,
       aiUsedCards: [],
       currentOpponent: initialDeck[0],
-      lastCheckpoint: null
+      lastCheckpoint: null,
+      
     };
   }),
   
   selectCard: (cardId: number) => set((state) => {
+    SoundSystem.play('cardSelect');
     if (state.gamePhase !== 'selection') return state;
     
     const selectedCard = state.playerDeck
@@ -102,6 +109,7 @@ export const useGameStore = create<GameState & {
   }),
 
   confirmSelection: () => set((state) => {
+    SoundSystem.play('buttonClick');
     if (!state.selectedCard || state.gamePhase !== 'selection' || !state.currentRule) return state;
     
     const availableAiCards = state.aiDeck.filter(card => !state.aiUsedCards.includes(card.id));
@@ -140,9 +148,11 @@ export const useGameStore = create<GameState & {
 
   
   nextPhase: () => set((state) => {
+    SoundSystem.play('buttonClick');
     if (state.gamePhase === 'selection') return state;
     
     if (state.gamePhase === 'reveal') {
+      SoundSystem.play('cardReveal');
       if (!state.currentRule || !state.selectedCard || !state.aiSelectedCard) {
         return state;
       }
@@ -159,6 +169,7 @@ export const useGameStore = create<GameState & {
     }
     
     if (state.gamePhase === 'result') {
+
       const allCardsUsed = state.playerDeck.length === state.playerUsedCards.length;
 
       if (!allCardsUsed) {
@@ -172,7 +183,9 @@ export const useGameStore = create<GameState & {
       }
 
       if (state.playerScore > state.aiScore) {
+        SoundSystem.play('victory');
         if (state.level === 6) {
+          SoundSystem.play('gameComplete');
           return {
             ...initialState,
             gamePhase: 'game_complete',
@@ -187,6 +200,7 @@ export const useGameStore = create<GameState & {
           lastWonCard: state.currentOpponent
         };
       } else {
+        SoundSystem.play('defeat');
         return {
           ...state,
           gamePhase: 'level_failed',
@@ -196,6 +210,7 @@ export const useGameStore = create<GameState & {
     }
 
     if (state.gamePhase === 'level_complete') {
+      SoundSystem.play('levelComplete');
       const nextLevel = state.level + 1;
       
       if (nextLevel === 6) {

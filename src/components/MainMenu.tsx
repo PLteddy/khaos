@@ -6,6 +6,7 @@ import { Language } from '../game/type';
 import fond from "../assets/fond.png";
 import buttonsfond from "../assets/buttonsfond.png";
 import column from "../assets/column.png";
+import { SoundSystem } from '../game/sound';
 
 const translations = {
   fr: {
@@ -23,6 +24,10 @@ const translations = {
     graphics: "Graphismes par",
     contact: "Contact",
     howToPlayTitle: "Comment jouer",
+    sound: "Son",
+    musique: "Musique",
+    on: "Activé",
+    off: "Désactivé",
     howToPlayText: `
 1. Chaque joueur commence avec 3 cartes
 2. À chaque tour, une règle de chaos est active
@@ -48,6 +53,10 @@ const translations = {
     graphics: "Graphics by",
     contact: "Contact",
     howToPlayTitle: "How to Play",
+    sound: "Sound",
+    musique: "Music",
+    on: "On",
+    off: "Off",
     howToPlayText: `
 1. Each player starts with 3 cards
 2. Each turn has an active chaos rule
@@ -117,7 +126,10 @@ export const MainMenu: React.FC = () => {
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
         className="flex items-center justify-center gap-3 text-white font-bold w-[300px] h-[100px] text-lg transition-colors"
-        onClick={startGame}
+        onClick={() => {
+          SoundSystem.play('buttonClick'); // Son du bouton
+          startGame(); // Ou l'action associée au bouton
+        }}
         style={{
           backgroundImage: `url(${buttonsfond})`,
           backgroundSize: "contain",
@@ -133,7 +145,11 @@ export const MainMenu: React.FC = () => {
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
         className="flex items-center justify-center gap-3 text-white font-bold w-[300px] h-[100px] text-lg transition-colors"
-        onClick={toggleCredits}
+        onClick={() => {
+          SoundSystem.play('buttonClick');
+          toggleCredits(); // Ajoute les parenthèses ici
+        }}
+        
         style={{
           backgroundImage: `url(${buttonsfond})`,
           backgroundSize: "contain",
@@ -149,7 +165,11 @@ export const MainMenu: React.FC = () => {
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
         className="flex items-center justify-center gap-3 text-white font-bold w-[300px] h-[100px] text-lg transition-colors"
-        onClick={toggleHowToPlay}
+        onClick={() => {
+          SoundSystem.play('buttonClick');
+          toggleHowToPlay(); // Ajoute les parenthèses ici
+        }}
+        
         style={{
           backgroundImage: `url(${buttonsfond})`,
           backgroundSize: "contain",
@@ -179,7 +199,8 @@ export const MainMenu: React.FC = () => {
           <p className="text-gray-300">{t.music}: Yussera Sebdaoui</p>
           <p className="text-gray-300">{t.graphics}: Yussera Sebdaoui</p>
           <button
-            onClick={toggleCredits}
+            onClick={() => {SoundSystem.play('buttonClick');
+              toggleCredits();}}
             className="mt-4 px-4 py-2 bg-purple-700 hover:bg-purple-600 text-white rounded-lg"
           >
             {t.close}
@@ -195,24 +216,16 @@ export const MainMenu: React.FC = () => {
         <motion.div className="bg-purple-900 p-6 rounded-xl shadow-xl max-w-md w-full mx-4">
           <h3 className="text-lg font-bold text-white mb-3">{t.language}</h3>
           <button
-            onClick={() => changeLanguage("fr")}
+             onClick={() => {SoundSystem.play('buttonClick'); changeLanguage("fr")}}
             className={`px-4 py-2 rounded-lg ${
               language === "fr" ? "bg-purple-600 text-white" : "bg-purple-800 text-gray-300"
             }`}
           >
             Français
           </button>
-          <button
-            onClick={() => changeLanguage("en")}
-            className={`px-4 py-2 rounded-lg ${
-              language === "en" ? "bg-purple-600 text-white" : "bg-purple-800 text-gray-300"
-            }`}
-          >
-            English
-          </button>
           <p className="text-gray-300">{t.howToPlayText}</p>
           <button
-            onClick={toggleHowToPlay}
+             onClick={() => {SoundSystem.play('buttonClick');toggleHowToPlay();}}
             className="mt-4 px-4 py-2 bg-purple-700 hover:bg-purple-600 text-white rounded-lg"
           >
             {t.close}

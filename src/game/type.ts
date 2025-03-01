@@ -23,6 +23,12 @@ export interface Opponent {
   description: string;
 }
 
+export interface RuleEffect {
+  playerCard: Card;
+  aiCard: Card;
+  pointMultiplier: number;
+}
+
 export type GamePhase = 
   | 'menu'           // Menu principal
   | 'selection'      // Sélection de carte
@@ -35,7 +41,7 @@ export type GamePhase =
 
 export type Language = 'fr' | 'en';
 
-interface Checkpoint {
+export interface Checkpoint {
   level: number;
   playerDeck: Card[];
   availableOpponents: Opponent[] | null;
@@ -62,4 +68,6 @@ export interface GameState {
   language: Language;
   showCredits: boolean;
   showHowToPlay: boolean;
+  soundEnabled: boolean;
+  musicEnabled: boolean;
 }

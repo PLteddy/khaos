@@ -11,6 +11,7 @@ import cardBackImage from "../assets/cards2.png";
 import buttonsfond from "../assets/button_menu.png";
 import niveau from "../assets/cerclelvl.png";
 import croix from "../assets/croix.png";
+import { SoundSystem } from '../game/sound'; // Adjust the import path as necessary
 
 export const GameBoard: React.FC = () => {
   const [showMenuConfirm, setShowMenuConfirm] = useState(false);
@@ -58,7 +59,8 @@ export const GameBoard: React.FC = () => {
       key={opponent.card.id}
       className="bg-purple-800/50 rounded-lg p-6 cursor-pointer hover:bg-purple-700/50 transition-colors"
       whileHover={{ scale: 1.05 }}
-      onClick={() => selectNextOpponent(opponent.card.id)}
+      onClick={() => { SoundSystem.play('buttonClick');
+        selectNextOpponent(opponent.card.id)}}
     >
       <h3 className="text-xl font-bold mb-2">{opponent.card.name}</h3>
       <p className="text-sm text-gray-300 mb-4">{opponent.description}</p>
@@ -86,7 +88,7 @@ export const GameBoard: React.FC = () => {
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           className="flex items-center justify-center text-white font-bold w-[150px] h-[50px] text-lg transition-colors"
-          onClick={() => setShowMenuConfirm(true)}
+          onClick={() => { SoundSystem.play('buttonClick'); setShowMenuConfirm(true)}}
           style={{
             backgroundImage: `url(${buttonsfond})`,
             backgroundSize: "contain",
@@ -137,13 +139,14 @@ export const GameBoard: React.FC = () => {
                 </p>
                 <div className="flex gap-4 justify-end">
                   <button
-                    onClick={() => setShowMenuConfirm(false)}
+                    onClick={() =>  { SoundSystem.play('buttonClick');setShowMenuConfirm(false)}}
                     className="px-4 py-2 bg-gray-600 hover:bg-gray-500 rounded-lg transition-colors"
                   >
                     Annuler
                   </button>
                   <button
                     onClick={() => {
+                      
                       resetGame();
                       setShowMenuConfirm(false);
                     }}
@@ -233,6 +236,7 @@ export const GameBoard: React.FC = () => {
                   animate={{ opacity: 1, y: 0 }}
                   className="px-6 py-3 bg-green-600 hover:bg-green-700 rounded-lg font-bold"
                   onClick={confirmSelection}
+                  
                 >
                   Confirmer la sélection
                 </motion.button>
