@@ -11,15 +11,15 @@ import { SoundSystem } from '../game/sound';
 const translations = {
   fr: {
     title: "Khaos",
-    subtitle: "Affrontez les dieux et les héros de la mythologie grecque",
+    subtitle: "Affrontez les dieux et les heros de la mythologie grecque",
     startGame: "Commencer l'aventure",
-    credits: "Crédits",
-    options: "Options",
+    credits: "Credits",
+    options: "Comment jouer ?",
     howToPlay: "Comment jouer",
     language: "Langue",
     close: "Fermer",
-    creditsTitle: "Crédits du jeu",
-    developer: "Développé par",
+    creditsTitle: "Credits du jeu",
+    developer: "Developpe par",
     music: "Musique par",
     graphics: "Graphismes par",
     contact: "Contact",
@@ -28,22 +28,21 @@ const translations = {
     musique: "Musique",
     on: "Activé",
     off: "Désactivé",
-    howToPlayText: `
-1. Chaque joueur commence avec 3 cartes
-2. À chaque tour, une règle de chaos est active
-3. Choisissez une carte en tenant compte de la règle
-4. La carte la plus forte gagne le tour
-5. Le premier à gagner 2 tours remporte le niveau
-6. Gagnez des cartes en battant vos adversaires
-7. Progressez à travers les niveaux jusqu'au boss final !
-    `
-  },
+    howToPlayText: 
+    "1. Chaque joueur commence avec un deck de 3 cartes.\n" +
+    "2. À chaque tour, une règle de chaos est active.\n" +
+    "3. Choisissez une carte en tenant compte de la règle.\n" +
+    "4. La carte la plus forte gagne le tour.\n" +
+    "5. La manche se finit quand chaque joueur n'a plus de cartes.\n" +
+    "6. Gagnez des cartes en battant vos adversaires.\n" +
+    "7. Progressez à travers les niveaux jusqu'au boss final !"
+},
   en: {
     title: "Mythological Card Game",
     subtitle: "Face the gods and heroes of Greek mythology",
     startGame: "Start Adventure",
     credits: "Credits",
-    options: "Options",
+    options: "How to Play ?",
     howToPlay: "How to Play",
     language: "Language",
     close: "Close",
@@ -117,7 +116,7 @@ export const MainMenu: React.FC = () => {
   <div className="relative w-full h-full flex items-center justify-center bg-black">
     {/* Image de gauche */}
     <div
-      className="absolute left-[12%] top-0 h-[110%] w-1/3 bg-no-repeat bg-contain bg-left"
+      className="absolute left-[12%] top-0 h-[110%] w-1/3 bg-no-repeat bg-contain bg-left hidden md:block"
       style={{ backgroundImage: `url(${column})` }}
     ></div>
 
@@ -182,11 +181,12 @@ export const MainMenu: React.FC = () => {
       </motion.button>
     </div>
 
-    {/* Image de droite */}
-    <div
-      className="absolute right-[12%] top-0 h-[110%] w-1/3 bg-no-repeat bg-contain bg-right"
-      style={{ backgroundImage: `url(${column})` }}
-    ></div>
+{/* Image de droite */} 
+<div
+  className="absolute right-[12%] top-0 h-[110%] w-1/3 bg-no-repeat bg-contain bg-right hidden md:block"
+  style={{ backgroundImage: `url(${column})` }}
+></div>
+
   </div>
 
   {/* Modals */}
@@ -223,7 +223,8 @@ export const MainMenu: React.FC = () => {
           >
             Français
           </button>
-          <p className="text-gray-300">{t.howToPlayText}</p>
+          <pre className="text-gray-300 whitespace-pre-line">{t.howToPlayText}</pre>
+
           <button
              onClick={() => {SoundSystem.play('buttonClick');toggleHowToPlay();}}
             className="mt-4 px-4 py-2 bg-purple-700 hover:bg-purple-600 text-white rounded-lg"

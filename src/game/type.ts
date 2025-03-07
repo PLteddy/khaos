@@ -30,6 +30,7 @@ export interface RuleEffect {
 }
 
 export type GamePhase = 
+  |'loading'         // Chargement initial
   | 'menu'           // Menu principal
   | 'selection'      // Sélection de carte
   | 'reveal'         // Révélation des cartes

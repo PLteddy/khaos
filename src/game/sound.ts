@@ -1,10 +1,12 @@
 import backgroundMusic from '../assets/music.mp3';
 import clickSound from '../assets/click-sound.mp3';
+import cardSound from '../assets/click-sound.mp3';
 
 export class SoundSystem {
     static sounds: { [key: string]: HTMLAudioElement } = {
       backgroundMusic: new Audio(backgroundMusic),
       buttonClick: new Audio(clickSound),
+      cardClick: new Audio(cardSound),
     };
   
     static play(soundName: string, loop: boolean = false) {

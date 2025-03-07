@@ -58,13 +58,13 @@ export const CARD_TYPES: { [key: string]: CardType } = {
    },
 
   // Niveau 2 - Créatures
-  MINOTAURE: { name: "Minotaure", type: "creature", value: 10, color: "#9ca3af",
+  MINOTAURE: { name: "Minotaur", type: "creature", value: 10, color: "#9ca3af",
     image: Minotaure
    },
-  MEDUSE: { name: "Méduse", type: "creature", value: 9, color: "#7c3aed",
+  MEDUSE: { name: "Meduse", type: "creature", value: 9, color: "#7c3aed",
     image: Meduse
    },
-  CERBERE: { name: "Cerbère", type: "creature", value: 8, color: "#374151",
+  CERBERE: { name: "Cerbere", type: "creature", value: 8, color: "#374151",
     image: Cerbere
    },
   HARPIES: { name: "Harpies", type: "creature", value: 7, color: "#9333ea",
@@ -73,47 +73,47 @@ export const CARD_TYPES: { [key: string]: CardType } = {
 
 
   // Niveau 3 - Héros
-  HERACLES: { name: "Héraclès", type: "hero", value: 14, color: "#f97316",
+  HERACLES: { name: "Heracles", type: "hero", value: 14, color: "#f97316",
     image: Heracles
    },
   ACHILLE: { name: "Achille", type: "hero", value: 13, color: "#2563eb",
     image: Achille
    },
-  ULYSSE: { name: "Ulysse", type: "hero", value: 12, color: "#7c3aed",
+  ULYSSE: { name: "Odysseus", type: "hero", value: 12, color: "#7c3aed",
     image: Ulysse
    },
-  THESEE: { name: "Thésée", type: "hero", value: 11, color: "#10b981",
+  THESEE: { name: "Theseus", type: "hero", value: 11, color: "#10b981",
     image: Thesee
    },
 
 
   // Niveau 4 - Dieux Mineurs
-  ATHENA: { name: "Athéna", type: "god", value: 18, color: "#facc15",
+  ATHENA: { name: "Athena", type: "god", value: 18, color: "#facc15",
     image: Athena
    },
-  APOLLON: { name: "Apollon", type: "god", value: 17, color: "#f59e0b",
+  APOLLON: { name: "Apollo", type: "god", value: 17, color: "#f59e0b",
     image: Apollon
    },
-  ARTEMIS: { name: "Artémis", type: "god", value: 16, color: "#84cc16",
+  ARTEMIS: { name: "Artemis", type: "god", value: 16, color: "#84cc16",
     image: Artemis
    },
-  HERMES: { name: "Hermès", type: "god", value: 15, color: "#14b8a6",
+  HERMES: { name: "Hermes", type: "god", value: 15, color: "#14b8a6",
     image: Hermes
    },
 
   // Niveau 5 - Dieux Majeurs
-  HADES: { name: "Hadès", type: "major_god", value: 21, color: "#374151",
+  HADES: { name: "Hades", type: "major_god", value: 21, color: "#374151",
     image: Hades
    },
-  POSEIDON: { name: "Poséidon", type: "major_god", value: 21, color: "#2563eb",
+  POSEIDON: { name: "Poseidon", type: "major_god", value: 20, color: "#2563eb",
     image: Poseidon
    },
-  HERA: { name: "Héra", type: "major_god", value: 21, color: "#d946ef",
+  HERA: { name: "Hera", type: "major_god", value: 19, color: "#d946ef",
     image: Hera
    },
 
   // Niveau 6 - Boss Final
-  ZEUS: { name: "Zeus", type: "boss", value: 15, color: "#fbbf24",
+  ZEUS: { name: "Zeus", type: "boss", value: 22, color: "#fbbf24",
     image: Zeus
    }
 } as const;
@@ -128,10 +128,10 @@ export function getInitialDeck(): Card[] {
 export function getOpponentsByLevel(level: number): Opponent[] {
   const opponents: { [key: number]: Opponent[] } = {
     1: [ // Mortels
-      { card: { id: 100, ...CARD_TYPES.ORACLE }, description: "Prédit l'avenir, influence les règles de chaos" },
+      { card: { id: 100, ...CARD_TYPES.ORACLE }, description: "Predit l'avenir, influence les règles de chaos" },
       { card: { id: 99, ...CARD_TYPES.PHILOSOPHE }, description: "Gagne face à la violence brute par la logique" },
-      { card: { id: 98, ...CARD_TYPES.ROI_AVEUGLE }, description: "Possède une sagesse cachée" },
-      { card: { id: 97, ...CARD_TYPES.MARCHAND }, description: "Peut négocier sa survie" },
+      { card: { id: 98, ...CARD_TYPES.ROI_AVEUGLE }, description: "Possède une sagesse cachee" },
+      { card: { id: 97, ...CARD_TYPES.MARCHAND }, description: "Peut negocier sa survie" },
       { card: { id: 96, ...CARD_TYPES.SOLDAT }, description: "Un simple guerrier, sans pouvoir particulier" },
       { card: { id: 95, ...CARD_TYPES.ESCLAVE }, description: "Le plus faible… mais peut surprendre avec une règle de chaos" }
     ],
@@ -139,24 +139,24 @@ export function getOpponentsByLevel(level: number): Opponent[] {
       { card: { id: 94, ...CARD_TYPES.MINOTAURE }, description: "Monstre brutal du labyrinthe" },
       { card: { id: 93, ...CARD_TYPES.MEDUSE }, description: "Transforme en pierre ceux qui la regardent" },
       { card: { id: 92, ...CARD_TYPES.CERBERE }, description: "Gardien des Enfers, 3 têtes" },
-      { card: { id: 91, ...CARD_TYPES.HARPIES }, description: "Démons ailés, voleurs rapides" },
+      { card: { id: 91, ...CARD_TYPES.HARPIES }, description: "Demons ailes, voleurs rapides" },
     ],
     3: [ // Héros
-      { card: { id: 90, ...CARD_TYPES.HERACLES }, description: "Le plus grand héros, force colossale" },
+      { card: { id: 90, ...CARD_TYPES.HERACLES }, description: "Le plus grand heros, force colossale" },
       { card: { id: 89, ...CARD_TYPES.ACHILLE }, description: "Guerrier invincible sauf au talon" },
-      { card: { id: 88, ...CARD_TYPES.ULYSSE }, description: "Maître de la ruse et de la stratégie" },
+      { card: { id: 88, ...CARD_TYPES.ULYSSE }, description: "Maître de la ruse et de la strategie" },
       { card: { id: 87, ...CARD_TYPES.THESEE }, description: "Vainqueur du Minotaure" },
     ],
     4: [ // Dieux Mineurs
-      { card: { id: 86, ...CARD_TYPES.ATHENA }, description: "Déesse de la sagesse et de la guerre stratégique" },
+      { card: { id: 86, ...CARD_TYPES.ATHENA }, description: "Deesse de la sagesse et de la guerre stratégique" },
       { card: { id: 85, ...CARD_TYPES.APOLLON }, description: "Dieu de la lumière et des arts" },
-      { card: { id: 84, ...CARD_TYPES.ARTEMIS }, description: "Déesse de la chasse et de la nature" },
+      { card: { id: 84, ...CARD_TYPES.ARTEMIS }, description: "Deesse de la chasse et de la nature" },
       { card: { id: 83, ...CARD_TYPES.HERMES }, description: "Messager des dieux, maître des ruses" }
     ],
     5: [ // Dieux Majeurs
       { card: { id: 82, ...CARD_TYPES.HADES }, description: "Dieu des Enfers" },
-      { card: { id: 81, ...CARD_TYPES.POSEIDON }, description: "Dieu des océans" },
-      { card: { id: 80, ...CARD_TYPES.HERA }, description: "Déesse du mariage et reine des dieux" }
+      { card: { id: 81, ...CARD_TYPES.POSEIDON }, description: "Dieu des oceans" },
+      { card: { id: 80, ...CARD_TYPES.HERA }, description: "Deesse du mariage et reine des dieux" }
     ],
     6: [ // Boss Final
       { card: { id: 79, ...CARD_TYPES.ZEUS }, description: "Dieu du ciel et de la foudre, roi des dieux" }

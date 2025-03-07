@@ -96,18 +96,7 @@ export const rules: ChaosRule[] = [
       },
       pointMultiplier: 1
     })
-  },
-  {
-    id: 9,
-    name: "Colère d'Arès",
-    description: "Si deux cartes du même type s'affrontent, la plus faible gagne !",
-    effect: (playerCard, aiCard) => ({
-      playerCard,
-      aiCard,
-      pointMultiplier: playerCard.type === aiCard.type ? -1 : 1
-    })
-  },
-  
+  },  
   {
     id: 10,
     name: "Ruse d'Hermès",
@@ -150,6 +139,38 @@ export const rules: ChaosRule[] = [
     description: "Les cartes sont échangées avant le duel !",
     effect: (playerCard, aiCard) => ({ playerCard: aiCard, aiCard: playerCard, pointMultiplier: 1 })
   },
+  {
+    id: 14,
+    name: "Miséricorde d'Hestia",
+    description: "Les cartes avec une valeur de 3 ou moins gagnent +7 points !",
+    effect: (playerCard, aiCard) => ({
+      playerCard: {
+        ...playerCard,
+        value: playerCard.value <= 3 ? playerCard.value + 7 : playerCard.value
+      },
+      aiCard: {
+        ...aiCard,
+        value: aiCard.value <= 3 ? aiCard.value + 7 : aiCard.value
+      },
+      pointMultiplier: 1
+    })
+  },
+  {
+    id: 16,
+    name: "Grâce d'Hypnos",
+    description: "Les cartes avec une valeur impaire gagnent +4 points !",
+    effect: (playerCard, aiCard) => ({
+      playerCard: {
+        ...playerCard,
+        value: playerCard.value % 2 !== 0 ? playerCard.value + 4 : playerCard.value
+      },
+      aiCard: {
+        ...aiCard,
+        value: aiCard.value % 2 !== 0 ? aiCard.value + 4 : aiCard.value
+      },
+      pointMultiplier: 1
+    })
+  }
   
 ];
 

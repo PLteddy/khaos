@@ -40,7 +40,6 @@ const chooseBestCard = (availableCards: Card[], rule: ChaosRule): Card | null =>
   }, availableCards[0]);
 };
 
-
 const initialState: GameState = {
   level: 1,
   playerDeck: getInitialDeck(),
@@ -52,7 +51,7 @@ const initialState: GameState = {
   currentRule: getRandomRule(),
   selectedCard: null,
   aiSelectedCard: null,
-  gamePhase: 'menu',
+  gamePhase: 'loading', // ✅ Démarre correctement avec l'écran de chargement
   availableOpponents: null,
   lastWonCard: null,
   currentOpponent: null,
@@ -63,8 +62,9 @@ const initialState: GameState = {
   showCredits: false,
   showHowToPlay: false,
   soundEnabled: true,
-  musicEnabled: true
+  musicEnabled: true,
 };
+
 
 export const useGameStore = create<GameState & {
   selectCard: (cardId: number) => void;
@@ -73,11 +73,13 @@ export const useGameStore = create<GameState & {
   selectNextOpponent: (opponentId: number) => void;
   resetGame: () => void;
   startGame: () => void;
+  goToMenu: () => void;
   
   returnToLastCheckpoint: () => void;
 }>((set) => ({
   ...initialState,
-
+  
+  goToMenu: () => set({ gamePhase: 'menu' }),
   startGame: () => set(state => {
     const initialDeck = getRandomOpponentDeck(1, state.playerDeck.length);
     SoundSystem.play('buttonClick');

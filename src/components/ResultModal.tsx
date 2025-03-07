@@ -35,11 +35,11 @@ export const ResultModal: React.FC = () => {
               <>
                 <Trophy className="w-20 h-20 text-yellow-400 mx-auto mb-4" />
                 <h2 className="text-3xl font-bold text-white mb-4">
-                  🏆 Félicitations ! 🎉
+                  🏆 Felicitations ! 🎉
                 </h2>
                 <p className="text-xl text-yellow-200 mb-2">Vous avez terminé le jeu !</p>
                 <p className="text-gray-300 mb-6">
-                  Vous avez vaincu tous les adversaires et remporté la victoire ultime !
+                  Vous avez vaincu tous les adversaires et remporte la victoire ultime !
                 </p>
                 <div className="flex flex-col gap-4">
                   <button
@@ -58,16 +58,16 @@ export const ResultModal: React.FC = () => {
               <>
                 <Trophy className="w-16 h-16 text-yellow-400 mx-auto mb-4" />
                 <h2 className="text-2xl font-bold text-white mb-4">
-                  Niveau {level} terminé !
+                  Niveau {level} termine !
                 </h2>
                 {lastWonCard && (
                   <div className="bg-purple-700/50 rounded-lg p-4 mb-6">
-                    <p className="text-yellow-400 font-bold mb-2">Carte gagnée :</p>
+                    <p className="text-yellow-400 font-bold mb-2">Carte gagnee :</p>
                     <p className="text-white">{lastWonCard.name}</p>
                   </div>
                 )}
                 <p className="text-gray-300 mb-6">
-                  Félicitations ! Vous avez vaincu {currentOpponent?.name} !
+                  Felicitations ! Vous avez vaincu {currentOpponent?.name} !
                 </p>
                 <button
                   onClick={nextPhase}
@@ -80,15 +80,15 @@ export const ResultModal: React.FC = () => {
               // Modal pour les échecs
               <>
                 <XCircle className="w-16 h-16 text-red-400 mx-auto mb-4" />
-                <h2 className="text-2xl font-bold text-white mb-4">Niveau {level} échoué</h2>
+                <h2 className="text-2xl font-bold text-white mb-4">Niveau {level} echoue</h2>
                 <p className="text-gray-300 mb-6">
-                  {currentOpponent?.name} vous a vaincu. Réessayez !
+                  {currentOpponent?.name} vous a vaincu. Reessayez !
                 </p>
                 <button
                   onClick={() => nextPhase()}
                   className="bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-6 rounded-lg transition-colors"
                 >
-                  Réessayer
+                  Reessayer
                 </button>
               </>
             ) : null}
