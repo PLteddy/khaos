@@ -12,7 +12,7 @@ export const ScoreBoard: React.FC<ScoreBoardProps> = ({ className = '' }) => {
   return (
     <div className={`bg-transparent rounded-lg p-2 sm:p-4 mb-4 sm:mb-6 flex flex-col items-center space-y-2 sm:space-y-4 ${className}`}>
       <div className="flex flex-col items-center space-y-2 sm:space-y-4">
-        <div className="bg-purple-800 px-3 sm:px-4 py-1 sm:py-2 rounded-md">
+        <div className="bg-yellow-500 px-3 sm:px-4 py-1 sm:py-2 rounded-md">
           <p className="text-white font-bold">
             <span className="hidden sm:inline">Niveau </span>
             {level}

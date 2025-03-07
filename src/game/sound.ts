@@ -1,6 +1,7 @@
-import backgroundMusic from '../assets/music.mp3';
-import clickSound from '../assets/click-sound.mp3';
-import cardSound from '../assets/click-sound.mp3';
+
+const backgroundMusic = "./music.mp3";
+const clickSound = "./click-sound.mp3";
+const cardSound = "./click-sound.mp3";
 
 export class SoundSystem {
     static sounds: { [key: string]: HTMLAudioElement } = {

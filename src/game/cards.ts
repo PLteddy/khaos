@@ -1,26 +1,27 @@
 import { Card } from './type';
-import Oracle from '../assets/cartes/oracle.png';
-import Zeus from '../assets/cartes/zeus.png';
-import Ulysse from '../assets/cartes/ulysse.png';
-import Philosophe from '../assets/cartes/philosophe.png';
-import Roi from '../assets/cartes/kingt.png';
-import Marchand from '../assets/cartes/mercantt.png';
-import Soldat from '../assets/cartes/soldat.png';
-import Slave from '../assets/cartes/slave.png';
-import Minotaure from '../assets/cartes/minotaure.png';
-import Meduse from '../assets/cartes/meduse.png';
-import Cerbere from '../assets/cartes/cerbere.png';
-import Harpie from '../assets/cartes/harpie.png';
-import Heracles from '../assets/cartes/heracles.png';
-import Achille from '../assets/cartes/achille.png';
-import Thesee from '../assets/cartes/thésée.png';
-import Artemis from '../assets/cartes/artemis.png';
-import Apollon from '../assets/cartes/apollon.png';
-import Athena from '../assets/cartes/athena.png';
-import Hermes from '../assets/cartes/hermes.png';
-import Hera from '../assets/cartes/hera.png';
-import Hades from '../assets/cartes/hades.png';
-import Poseidon from '../assets/cartes/poseidon.png';
+const Oracle = "./cartes/oracle.png";
+const Zeus = "./cartes/zeus.png";
+const Ulysse = "./cartes/ulysse.png";
+const Philosophe = "./cartes/philosophe.png";
+const Roi = "./cartes/kingt.png";
+const Marchand = "./cartes/mercantt.png";
+const Soldat = "./cartes/soldat.png";
+const Slave = "./cartes/slave.png";
+const Minotaure = "./cartes/minotaure.png";
+const Meduse = "./cartes/meduse.png";
+const Cerbere = "./cartes/cerbere.png";
+const Harpie = "./cartes/harpie.png";
+const Heracles = "./cartes/heracles.png";
+const Achille = "./cartes/achille.png";
+const Thesee = "./cartes/thésée.png";
+const Artemis = "./cartes/artemis.png";
+const Apollon = "./cartes/apollon.png";
+const Athena = "./cartes/athena.png";
+const Hermes = "./cartes/hermes.png";
+const Hera = "./cartes/hera.png";
+const Hades = "./cartes/hades.png";
+const Poseidon = "./cartes/poseidon.png";
+// Compare this snippet from src/game/store.ts:
 
 
 interface CardType {

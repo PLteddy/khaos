@@ -1,7 +1,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { useGameStore } from "../game/store";
-import kaosImage from "../assets/kaossfond.png";
+const kaosImage = "./kaossfond.png";
 
 export const ChaosRuleDisplay: React.FC = () => {
   const { currentRule } = useGameStore();

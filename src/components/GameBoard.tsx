@@ -7,10 +7,10 @@ import { ScoreBoard } from './ScoreBoard';
 import { ResultModal} from './ResultModal';
 import { Menu, RotateCcw } from 'lucide-react';
 import cardImage from "../assets/cards2.png";
-import cardBackImage from "../assets/cards2.png";
-import buttonsfond from "../assets/button_menu.png";
-import niveau from "../assets/cerclelvl.png";
-import croix from "../assets/croix.png";
+const cardBackImage = "./cards2.png";
+const buttonsfond = "./button_menu.png";
+const niveau = "./cerclelvl.png";
+const croix = "./croix.png";
 import { SoundSystem } from '../game/sound';
 import { useSwipeable } from 'react-swipeable';
 
@@ -57,7 +57,7 @@ export const GameBoard: React.FC = () => {
             opponent.card ? (
               <motion.div
                 key={opponent.card.id}
-                className="bg-purple-800/50 rounded-lg p-4 sm:p-6 cursor-pointer hover:bg-purple-700/50 transition-colors"
+                className="bg-yellow-400 rounded-lg p-4 sm:p-6 cursor-pointer hover:bg-yellow-500/50 transition-colors"
                 whileHover={{ scale: 1.05 }}
                 onClick={() => { 
                   SoundSystem.play('buttonClick');
@@ -65,8 +65,8 @@ export const GameBoard: React.FC = () => {
                 }}
               >
                 <h3 className="text-lg sm:text-xl font-bold mb-2">{opponent.card.name}</h3>
-                <p className="text-xs sm:text-sm text-gray-300 mb-4">{opponent.description}</p>
-                <div className="text-yellow-400 font-bold">
+                <p className="text-xs sm:text-sm text-white mb-4">{opponent.description}</p>
+                <div className="text-black font-bold">
                   Force: {opponent.card.value}
                 </div>
               </motion.div>
@@ -137,10 +137,10 @@ export const GameBoard: React.FC = () => {
                 initial={{ scale: 0.8, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 exit={{ scale: 0.8, opacity: 0 }}
-                className="bg-purple-900 p-6 sm:p-8 rounded-xl shadow-xl max-w-md w-full mx-4"
+                className="bg-yellow-500 p-6 sm:p-8 rounded-xl shadow-xl max-w-md w-full mx-4"
               >
                 <h3 className="text-lg sm:text-xl font-bold mb-4">Retour au menu principal ?</h3>
-                <p className="text-sm sm:text-base text-gray-300 mb-6">
+                <p className="text-sm sm:text-base text-white mb-6">
                   Attention : votre progression ne sera pas sauvegardee.
                 </p>
                 <div className="flex gap-4 justify-end">
@@ -260,7 +260,7 @@ export const GameBoard: React.FC = () => {
   <div className="mt-8 text-center">
     <button
       onClick={nextPhase}
-      className="px-6 py-3 bg-purple-600 hover:bg-purple-700 rounded-lg font-bold"
+      className="px-6 py-3 bg-yellow-600 hover:bg-yellow-700 rounded-lg font-bold"
     >
       {gamePhase === 'reveal' ? 'Révéler les cartes' : 'Tour suivant'}
     </button>

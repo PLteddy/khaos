@@ -3,12 +3,12 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Swords, Info, Settings, Mail, Linkedin } from 'lucide-react';
 import { useGameStore } from '../game/store';
 import { Language } from '../game/type';
-import fond from "../assets/fond.png";
-import buttonsfond from "../assets/buttonsfond.png";
-import column from "../assets/column.png";
 import { SoundSystem } from '../game/sound';
-
+const fond = "./fond.png";
+const buttonsfond = "./buttonsfond.png";
+const column = "./column.png";
 const translations = {
+
   fr: {
     title: "Khaos",
     subtitle: "Affrontez les dieux et les heros de la mythologie grecque",
@@ -193,15 +193,15 @@ export const MainMenu: React.FC = () => {
   <AnimatePresence>
     {showCredits && (
       <motion.div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-        <motion.div className="bg-purple-900 p-6 rounded-xl shadow-xl max-w-md w-full mx-4">
+        <motion.div className="bg-yellow-400 p-6 rounded-xl shadow-xl max-w-md w-full mx-4">
           <h2 className="text-xl font-bold text-white mb-4">{t.creditsTitle}</h2>
-          <p className="text-gray-300">{t.developer}: Yussera Sebdaoui</p>
-          <p className="text-gray-300">{t.music}: Yussera Sebdaoui</p>
-          <p className="text-gray-300">{t.graphics}: Yussera Sebdaoui</p>
+          <p className="text-white">{t.developer}: Yussera Sebdaoui</p>
+          <p className="text-white">{t.music}: Yussera Sebdaoui</p>
+          <p className="text-white">{t.graphics}: Yussera Sebdaoui</p>
           <button
             onClick={() => {SoundSystem.play('buttonClick');
               toggleCredits();}}
-            className="mt-4 px-4 py-2 bg-purple-700 hover:bg-purple-600 text-white rounded-lg"
+            className="mt-4 px-4 py-2 bg-black hover:bg-yellow-600 text-white rounded-lg"
           >
             {t.close}
           </button>
@@ -213,21 +213,21 @@ export const MainMenu: React.FC = () => {
   <AnimatePresence>
     {showHowToPlay && (
       <motion.div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-        <motion.div className="bg-purple-900 p-6 rounded-xl shadow-xl max-w-md w-full mx-4">
+        <motion.div className="bg-yellow-400 p-6 rounded-xl shadow-xl max-w-md w-full mx-4">
           <h3 className="text-lg font-bold text-white mb-3">{t.language}</h3>
           <button
              onClick={() => {SoundSystem.play('buttonClick'); changeLanguage("fr")}}
             className={`px-4 py-2 rounded-lg ${
-              language === "fr" ? "bg-purple-600 text-white" : "bg-purple-800 text-gray-300"
+              language === "fr" ? "bg-yellow-600 text-white" : "bg-yellow-600 text-white"
             }`}
           >
             Français
           </button>
-          <pre className="text-gray-300 whitespace-pre-line">{t.howToPlayText}</pre>
+          <pre className="text-white whitespace-pre-line">{t.howToPlayText}</pre>
 
           <button
              onClick={() => {SoundSystem.play('buttonClick');toggleHowToPlay();}}
-            className="mt-4 px-4 py-2 bg-purple-700 hover:bg-purple-600 text-white rounded-lg"
+            className="mt-4 px-4 py-2 bg-black hover:bg-yellow-600 text-white rounded-lg"
           >
             {t.close}
           </button>
