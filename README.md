@@ -24,7 +24,7 @@ Construis ton deck, bats-toi contre des adversaires redoutables, et essaie d'att
 
 ## 👤 Auteur
 
-- **Ton Nom** - [Yussera Sebdaoui](https://github.com/PLteddy)
+- [Yussera Sebdaoui](https://github.com/PLteddy)
 
 ## 📜 Licence
 
